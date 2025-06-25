@@ -150,7 +150,7 @@
             border-radius: 3px;
             box-sizing: border-box;
             background-color: rgba(255, 255, 255, 0.6);
-            padding: 10px;
+            /* padding: 10px; */
             overflow-y: auto;
             /* Scroll jika konten melebihi */
         }
@@ -253,18 +253,19 @@
     </div>
 
     <!-- CKEditor CDN -->
-    <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
     <script>
         let selectedContentBox = null;
         let selectedType = null;
         let editorInstance = null;
         document.addEventListener('DOMContentLoaded', function() {
             const grid = GridStack.init({
-                column: 12,
+                column: 24,
                 cellHeight: '20px',
                 float: true,
                 acceptWidgets: true,
-                animate: true
+                animate: true,
+                margin: 0,
             }, '.tabloid-grid');
 
             const layoutTemplates = document.querySelectorAll('.layout-template');
@@ -382,7 +383,7 @@
                                         contentElement = document.createElement('img');
                                         contentElement.className = 'content-image';
                                         contentElement.src =
-                                            'https://picsum.photos/800/200';
+                                            '/image.png';
                                         contentElement.alt = 'Gambar';
                                         break;
                                     case 'title':
