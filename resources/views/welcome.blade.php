@@ -210,6 +210,20 @@
             font-size: 0.9em;
             text-align: center;
         }
+
+        /* Terapkan z-index berdasarkan data-layer */
+        .grid-stack-item[data-layer="1"] {
+            z-index: 10;
+        }
+
+        .grid-stack-item[data-layer="2"] {
+            z-index: 20;
+            /* Lebih tinggi, jadi akan di atas */
+        }
+
+        .grid-stack-item[data-layer="3"] {
+            z-index: 30;
+        }
     </style>
 </head>
 
@@ -219,9 +233,12 @@
         <div class="sidebar">
             <h3>Palet Layout</h3>
             <div class="layout-palette">
-                <div class="layout-template" data-w="12" data-h="4" draggable="true">Layout Penuh</div>
-                <div class="layout-template" data-w="6" data-h="4" draggable="true">Layout Setengah</div>
-                <div class="layout-template" data-w="4" data-h="4" draggable="true">Layout Sepertiga</div>
+                <div class="layout-template" data-w="12" data-h="4" data-layer="1" draggable="true">Layout Penuh
+                </div>
+                <div class="layout-template" data-w="6" data-h="4" data-layer="1" draggable="true">Layout
+                    Setengah</div>
+                <div class="layout-template" data-w="4" data-h="4" data-layer="2" draggable="true">Layout
+                    Sepertiga</div>
             </div>
 
             <h3>Palet Konten</h3>
@@ -259,13 +276,19 @@
         let selectedType = null;
         let editorInstance = null;
         document.addEventListener('DOMContentLoaded', function() {
+            // Hitung minRow agar gridstack mengisi penuh tinggi kertas
+            const paperHeight = 1123; // px, sesuai .paper-canvas.a4-potrait
+            const cellHeight = 20; // px, sesuai cellHeight gridstack
+            const minRow = Math.ceil(paperHeight / cellHeight);
             const grid = GridStack.init({
                 column: 24,
-                cellHeight: '20px',
+                cellHeight: 'auto',
                 float: true,
                 acceptWidgets: true,
                 animate: true,
                 margin: 0,
+                minRow: minRow, // Paksa gridstack agar grid selalu setinggi kertas
+                // disableResize: true,
             }, '.tabloid-grid');
 
             const layoutTemplates = document.querySelectorAll('.layout-template');
@@ -296,11 +319,21 @@
                     const mouseX = e.clientX - gridRect.left;
                     const mouseY = e.clientY - gridRect.top;
 
-                    const cellWidth = gridElement.offsetWidth / grid.column;
-                    const cellHeight = grid.cellHeight();
-
-                    const x = Math.floor(mouseX / cellWidth);
-                    const y = Math.floor(mouseY / cellHeight);
+                    // Gunakan API gridstack jika tersedia untuk konversi pixel ke cell
+                    let x, y;
+                    if (typeof grid.getCellFromPixel === 'function') {
+                        const cell = grid.getCellFromPixel({
+                            left: mouseX,
+                            top: mouseY
+                        });
+                        x = cell.x;
+                        y = cell.y;
+                    } else {
+                        const cellWidth = gridElement.offsetWidth / grid.column;
+                        const cellHeight = parseFloat(grid.cellHeight());
+                        x = Math.floor(mouseX / cellWidth);
+                        y = Math.floor(mouseY / cellHeight);
+                    }
 
                     grid.addWidget({
                         x: x,
@@ -333,6 +366,11 @@
 
             grid.on('added', function(event, items) {
                 items.forEach(item => {
+                    const layer = item.el.dataset.layer; // Jika diatur di layout-template
+                    if (layer) {
+                        item.el.style.zIndex = layer *
+                            10; // Contoh: layer 1 -> z-index 10, layer 2 -> z-index 20
+                    }
                     const itemContent = item.el.querySelector('.grid-stack-item-content');
                     if (itemContent) {
                         itemContent.innerHTML = `<div class="inner-layout-box"></div>`;
