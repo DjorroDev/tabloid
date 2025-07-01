@@ -173,9 +173,10 @@
         }
 
         .content-image {
-            max-width: 100%;
-            height: auto;
+            width: 100%;
+            height: 100%;
             display: block;
+            object-fit: fill;
         }
 
         .content-placeholder {
@@ -204,8 +205,8 @@
             </div>
             <button id="save-layout" class="btn btn-primary mt-3">Simpan Layout</button>
             <button id="save-all" class="btn btn-primary mt-3">Simpan semua halaman</button>
-            <button id="load-layout" class="btn btn-info mt-2">Muat Layout</button>
-            <button id="load-all-page" class="btn btn-info mt-2">Muat semua halaman</button>
+            {{-- <button id="load-layout" class="btn btn-info mt-2">Muat Layout</button>
+            <button id="load-all-page" class="btn btn-info mt-2">Muat semua halaman</button> --}}
             <br>
             <h3>Navigasi Halaman</h3>
             <div class="page-navigation">

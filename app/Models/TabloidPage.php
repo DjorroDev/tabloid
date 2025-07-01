@@ -17,7 +17,7 @@ class TabloidPage extends Model
     ];
 
     protected $casts = [
-        'data' => 'array',
+        'data' => 'object',
     ];
 
     /**

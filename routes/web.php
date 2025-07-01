@@ -29,3 +29,5 @@ Route::post('/tabloids', [TabloidController::class, 'store']);
 Route::get('/tabloids/{tabloid}/editor', [TabloidController::class, 'edit'])->name('tabloid.edit');
 Route::post('/tabloids/{tabloid}/editor', [TabloidController::class, 'update'])->name('tabloid.update');
 Route::get('/tabloids/{tabloid}/get-pages', [TabloidController::class, 'getAllPages'])->name('tabloid.getpages');
+Route::get('/tabloids/{id}/export', [TabloidController::class, 'exportToPDF'])->name('tabloid.export');
+// Route::get

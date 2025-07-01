@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Tabloid;
 use App\Models\TabloidPage;
+use Breuer\MakePDF\Enums\Format;
+use Breuer\MakePDF\Facades\PDF;
 use Illuminate\Http\Request;
 
 class TabloidController extends Controller
@@ -47,6 +49,15 @@ class TabloidController extends Controller
     public function edit(Tabloid $tabloid)
     {
         return view('editor', ['tabloid' => $tabloid]);
+    }
+
+    public function exportToPDF(Tabloid $tabloid, $id)
+    {
+        $tabloid = Tabloid::with(['pages' => function ($q) {
+            $q->orderBy('page_number', 'asc');
+        }])->find($id);
+        return PDF::format(Format::A4)->view('export', ['tabloid' => $tabloid])->response();
+        // return view('export', ['tabloid' => $tabloid]);
     }
 
     public function getAllPages(Tabloid $tabloid)
