@@ -1,0 +1,1475 @@
+:root {
+    --c-primary: #f06c36;
+    /*Red*/
+    --c-secondary: #28317e;
+    /*Blue*/
+    --c-white: #f4f4f4;
+    /*White*/
+    --c-black: #333333;
+    /*Pure Black*/
+    --bg-body: #e9e9e9;
+    /*Body Background*/
+    --c-white: #ffffff;
+    /* White */
+    --c-grey: #d1d1d1;
+    /* Grey */
+    --c-transparent: transparent;
+    /* Transparent */
+    --ts-cubic: all 0.3s cubic-bezier(0.47, 0.71, 0.66, 0.84);
+    /* Animation */
+}
+
+@media (max-width: 325px) {
+    header #navigation .logo img.navbar-logo {
+        width: 120px !important;
+        margin-top: 5px !important;
+    }
+}
+
+@media (max-width: 1024px) {
+    section {
+        padding: 25px 0;
+    }
+
+    h1 {
+        font-size: 40px;
+    }
+
+    h2 {
+        font-size: 30px;
+    }
+
+    h3 {
+        font-size: 24px;
+    }
+
+    h4 {
+        font-size: 22px;
+    }
+
+    h5 {
+        font-size: 20px;
+    }
+
+    h6 {
+        font-size: 18px;
+        font-weight: 600;
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    img.icon-16 {
+        width: 16px;
+        height: 16px;
+    }
+
+    img.icon-24 {
+        width: 18px;
+        height: 18px;
+    }
+
+    img.icon-32 {
+        width: 24px;
+        height: 24px;
+    }
+
+    img.icon-48 {
+        width: 32px;
+        height: 32px;
+    }
+
+    .rd-100 {
+        border-radius: 20px;
+    }
+
+    select.form-control,
+    input.form-control,
+    textarea.form-control {
+        font-size: 15px;
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+        width: 36px !important;
+        height: 36px !important;
+    }
+
+    .swiper-button-prev {
+        left: 10px;
+    }
+
+    .swiper-button-next {
+        right: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 16px !important;
+    }
+
+    .modal-body {
+        padding: 1rem;
+    }
+
+    .section-pad {
+        padding: 50px 0;
+    }
+
+    .swiper-button-next,
+    .swiper-button-prev {
+        top: 50%;
+    }
+
+    .c-small {
+        font-size: 12px;
+    }
+
+    .modal-header .close {
+        opacity: 1;
+        top: 8px;
+        right: 5px;
+    }
+
+    .modal-header .close span {
+        font-size: 16px;
+    }
+
+    #modalPopupBanner .poster-prev,
+    #modalPopupBanner .poster-next {
+        display: none;
+    }
+
+    #modalPopupBanner .close {
+        right: 5px;
+    }
+
+    /*====================================== SECTION MENU NAVBAR ======================================*/
+    .nav-logo a span {
+        display: none;
+    }
+
+    .nav-logo .btn-secondary {
+        width: 30px;
+        height: 30px;
+    }
+
+    header nav {
+        padding: 15px 5px;
+    }
+
+    .container-nav {
+        /*flex-direction: column;*/
+        z-index: 99;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 0 10px;
+        gap: 8px;
+    }
+
+    .container-nav .nav-logo a img {
+        padding-left: 0;
+        width: 125px;
+    }
+
+    .container-nav .nav-logo::before {
+        top: -20px;
+    }
+
+    .nav-logo:hover::before {
+        height: 86px;
+    }
+
+    button.nav-toggle {
+        display: flex;
+    }
+
+    .container-nav .nav-menu ul {
+        gap: 8px;
+    }
+
+    .container-nav .nav-menu.active li {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .container-nav .nav-menu.active li:nth-child(1) {
+        transition-delay: 0.2s;
+    }
+
+    .container-nav .nav-menu.active li:nth-child(2) {
+        transition-delay: 0.3s;
+    }
+
+    .container-nav .nav-menu.active li:nth-child(3) {
+        transition-delay: 0.4s;
+    }
+
+    .container-nav .nav-menu.active li:nth-child(4) {
+        transition-delay: 0.5s;
+    }
+
+    .container-nav .nav-menu.active li:nth-child(4) {
+        transition-delay: 0.6s;
+    }
+
+    .container-nav .nav-menu.active li:nth-child(5) {
+        transition-delay: 0.7s;
+    }
+
+    .container-nav .nav-menu.active li:nth-child(6) {
+        transition-delay: 0.8s;
+    }
+
+    .container-nav .nav-menu .menu-cta {
+        margin-top: 8px;
+    }
+
+    .container-nav .nav-menu li a {
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .form-group {
+        margin-bottom: 30px;
+    }
+    .hero-banner.guest {
+        height: 100vh !important;
+        position: fixed;
+    }
+    #videoDesktop {
+        display: none;
+    }
+    #videoPortrait {
+        position: fixed;
+        width: 100%;
+        display: block;
+    }
+}
+
+/*Phone View*/
+@media (max-width: 767px) {
+    /*====================================== SECTION MENU NAVBAR ======================================*/
+
+    .container-nav {
+        /*flex-direction: column;*/
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        padding: 0 10px;
+    }
+
+    .truck-navbar {
+        width: 75px;
+    }
+
+    /*====================================== SECTION DEFAULT ======================================*/
+
+    .section-pad {
+        padding: 50px 0;
+    }
+
+    /*====================================== SECTION HOME PAGE ======================================*/
+    section .subject-title,
+    section .col-title {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        align-items: center !important;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .height-title-wrapper {
+        height: 66px;
+        align-items: center;
+    }
+
+    section .link-web {
+        text-align: center;
+    }
+
+    section.section-banner .subject-title,
+    section.section-widget .subject-title {
+        align-items: center !important;
+    }
+
+    .hero-banner {
+        height: 200px;
+    }
+
+    .hero-banner .subject-title {
+        gap: 0.2rem;
+    }
+
+    .hero-banner .subject-title .banner-image {
+        max-width: 10rem;
+        margin-bottom: 1rem !important;
+    }
+
+    .hero-banner .subject-title h3 {
+        text-align: left;
+        font-size: 100%;
+    }
+
+    .hero-banner .subject-title h6 {
+        font-size: 75%;
+    }
+    section.section-banner .hero-banner.guest .subject-title {
+        align-items: center !important;
+    }
+
+    .subject-hello {
+        width: 32px;
+        height: 32px;
+        transform: translateY(8px) translateX(2px);
+    }
+
+    .row-widget-highlight {
+        margin-bottom: 16px;
+    }
+
+    .widget-card {
+        margin-bottom: 12px;
+    }
+
+    .col-last-widget {
+        gap: 1rem;
+    }
+
+    .widget-card.widget-inbox-highlight {
+        height: 100%;
+        margin-bottom: 16px;
+    }
+
+    .widget-card .widget-icon {
+        width: 79%;
+        height: 64px;
+    }
+
+    .widget-card .widget-icon-box {
+        width: 54px;
+        height: 54px;
+    }
+
+    .widget-card .widget-label h4 {
+        font-size: 18px;
+    }
+
+    .widget-shadow {
+        right: 8px;
+        bottom: 22px;
+    }
+
+    .widget-shadow h4 {
+        font-size: 10px;
+    }
+
+    .pagination-wrapper__bullet {
+        gap: 0;
+        flex-direction: column;
+        margin-top: 1rem;
+    }
+
+    .pagination-wrapper__bullet a {
+        font-size: 16px;
+    }
+
+    section.section-news-internal .nav-pills,
+    section.section-edaran .nav-pills,
+    section.section-edaran-page .nav-pills {
+        display: flex;
+        flex-direction: row;
+        margin: 0 auto;
+        width: 100%;
+        flex-wrap: nowrap;
+        justify-content: start;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+        -ms-overflow-style: none;
+        /* Internet Explorer 10+ */
+        scrollbar-width: none;
+    }
+
+    section.section-news-internal .nav-pills::-webkit-scrollbar,
+    section.section-edaran .nav-pills::-webkit-scrollbar {
+        display: none;
+    }
+
+    .news-internal-head .news-internal-card a {
+        flex-direction: column;
+    }
+
+    .button-swiper {
+        margin: 0 auto;
+        max-width: 110px;
+    }
+
+    .tooltip-custom {
+        width: 100%;
+        text-align: center;
+    }
+
+    .tooltip-custom .tooltiptext {
+        visibility: hidden;
+        width: 180px;
+        background-color: #555;
+        border-bottom: 1px dotted black;
+        font-size: 18px;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        bottom: 100%;
+        left: 50px;
+        margin-left: -60px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .tooltip-custom .tooltiptext::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 85%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #555 transparent transparent transparent;
+    }
+
+    .section-story,
+    .swiper-birthday-top,
+    .section-insan-birthday {
+        padding-bottom: 0 !important;
+    }
+
+    .swiper-birthday-top .desc p {
+        min-height: 48px;
+    }
+
+    .swiper-news-internal {
+        padding-top: 2rem !important;
+    }
+
+    #modalStory .modal-header,
+    #modalStory .modal-body,
+    #modalEdaran .modal-header {
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+    }
+
+    .swiper-insan {
+        margin-top: 24px;
+    }
+
+    .swiper-insan .pagination-wrapper__bullet,
+    section.section-insan-profile .subject-title {
+        margin-top: 0 !important;
+    }
+
+    .icon-insan {
+        width: 72px;
+        height: 72px;
+    }
+
+    .baloon .image {
+        max-width: 48px;
+    }
+
+    .baloon-1 {
+        top: 15%;
+        left: 0%;
+    }
+
+    .baloon-2 {
+        top: 20%;
+        right: 2%;
+    }
+
+    .baloon-3 {
+        z-index: 9;
+        top: 60%;
+        left: 3%;
+    }
+
+    .baloon-3 .image {
+        max-width: 100px;
+    }
+
+    .baloon-4 {
+        top: 70%;
+    }
+
+    section.section-insan-profile .subject-title {
+        margin-top: 32px;
+        flex-direction: row;
+    }
+
+    .profile-card {
+        flex-direction: row;
+    }
+
+    .profile-card.profile-highlight {
+        flex-direction: column;
+    }
+
+    .profile-card .image,
+    .profile-card.profile-highlight .image {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .profile-card.profile-highlight .image img,
+    .profile-card.profile-highlight > .profile-card-img {
+        border: 0 !important;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        border-bottom-left-radius: 0;
+    }
+
+    .profile-card > .profile-card-img {
+        max-width: 40% !important;
+    }
+
+    .profile-card.profile-highlight > .profile-card-img {
+        max-width: 100% !important;
+    }
+
+    .profile-card.profile-highlight .image img {
+        object-fit: contain;
+    }
+
+    .profile-card .image,
+    .profile-card.profile-highlight .image {
+        height: 200px;
+    }
+
+    .profile-card.profile-highlight {
+        min-height: auto;
+        max-height: 100%;
+    }
+
+    .profile-card.profile-highlight > .desc {
+        justify-content: start;
+        min-height: auto;
+    }
+
+    .profile-card > .desc {
+        padding: 8px 16px 16px 16px;
+        width: 100%;
+    }
+
+    .row-profile .col-12 {
+        gap: 2rem !important;
+    }
+
+    .profile-card.profile-highlight {
+        margin-bottom: 32px;
+    }
+
+    .profile-detail .image {
+    }
+
+    .profile-detail .image .bp-peek {
+        right: 72px;
+    }
+
+    .col-edaran {
+        flex-direction: column;
+    }
+
+    .button-swiper-edaran,
+    .button-swiper-calendar,
+    .button-swiper-instagram,
+    .button-swiper-video-internal {
+        height: 48px;
+        margin-left: auto;
+    }
+
+    .banner-qhse-card {
+        max-width: 82.5rem;
+        max-height: 20rem;
+    }
+
+    .instagram-media,
+    .swiper-instagram {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+    }
+
+    .button-swiper-instagram {
+        display: none;
+    }
+
+    .swiper-video-youtube {
+        padding-bottom: 0 !important;
+        margin-bottom: 36px;
+    }
+
+    section.section-edaran .tab-content {
+        margin-top: 16px;
+    }
+
+    #modalEdaran .modal-body {
+        padding: 1rem !important;
+    }
+
+    .calendar-card .date h3 {
+        font-size: 32px;
+    }
+
+    .swiper-calendar {
+        padding-top: 0rem !important;
+        padding-bottom: 3rem !important;
+    }
+
+    .calendar-card {
+        /* min-height: auto; */
+        padding-bottom: 8px;
+    }
+
+    .calendar-card .calendar-card-top {
+        padding-top: 16px;
+    }
+
+    .calendar-card .calendar-event .event-list {
+        align-items: start !important;
+        margin: 0 12px;
+        padding: 8px 0 8px 0;
+    }
+
+    .swiper-edaran {
+        padding-bottom: 0 !important;
+    }
+
+    .corporate-card {
+        height: 200px;
+    }
+
+    .ig-embed-iframe {
+        height: 340px;
+        margin-bottom: 16px;
+    }
+
+    .col-corporate:nth-child(2) .corporate-card {
+        height: 300px;
+    }
+
+    section.section-news-press .row.mb24 {
+        margin-bottom: 0 !important;
+    }
+
+    .col-news,
+    .col-news:nth-child(2) .news-card {
+        margin-bottom: 24px;
+    }
+
+    .col-news:nth-child(2),
+    .col-news:nth-child(2) .news-card:last-child {
+        margin-bottom: 0;
+    }
+
+    .news-card a {
+        flex-direction: column;
+    }
+
+    .col-news:nth-child(2) .news-card .image {
+        max-width: 100%;
+    }
+
+    .bb-card {
+        height: 300px;
+        margin-bottom: 24px;
+    }
+
+    .col-bb:nth-child(2) .bb-card:nth-child(2),
+    .col-bb:nth-child(2) .bb-card:nth-child(3) {
+        width: 100%;
+    }
+
+    .col-bb:nth-child(2) .bb-card:nth-child(3) {
+        margin-bottom: 0;
+    }
+
+    .news-list-card .image {
+        height: 240px;
+    }
+
+    .swiper-video-internal {
+        margin-top: 0;
+    }
+
+    .iframe-short {
+        margin-bottom: 16px;
+    }
+
+    .linkdn-container {
+        padding-top: 0 !important;
+    }
+
+    .swiper-linkdnl .swiper-container-horizontal > .swiper-pagination-bullets {
+        bottom: 40px !important;
+    }
+
+    /* ======================================SECTION NEWS DETAIL====================================== */
+    .blog-banner {
+        height: 200px;
+    }
+
+    .blog-desc .blog-desc-img {
+        width: 48px;
+        height: 48px;
+    }
+
+    .back-blog-detail {
+        position: static;
+        margin-bottom: 24px;
+    }
+
+    .back-blog-detail span {
+        display: inline-block;
+    }
+
+    section.section-news-banner .subject-title,
+    section.section-news-category .subject-title,
+    section.section-recommend .subject-title {
+        align-items: start !important;
+    }
+
+    .col-news-detail:nth-child(1) {
+        order: 3;
+    }
+
+    .col-news-detail:nth-child(2) {
+        order: 1;
+    }
+
+    .col-news-detail:nth-child(3) {
+        order: 2;
+    }
+
+    .power-bi-wrapper {
+        margin-top: 0rem;
+    }
+    /* ======================================SECTION EDARAN====================================== */
+    .hero-banner .subject-title p {
+        font-size: 12px;
+    }
+
+    .col-edaran-page ul {
+        width: 100%;
+        margin: 0 auto 16px auto !important;
+        justify-content: center !important;
+    }
+
+    .col-edaran-list {
+        align-items: start !important;
+        flex-direction: column;
+    }
+
+    section.section-edaran-page .edaran-card {
+        margin-right: 16px;
+        margin-bottom: 24px;
+    }
+
+    .col-edaran-page {
+        flex-direction: column !important;
+    }
+
+    section.section-edaran-list .subject-title {
+        align-items: start !important;
+    }
+
+    /* ======================================SECTION SOCIAL MEDIA====================================== */
+    .video-poster-swiper img {
+        object-fit: cover;
+    }
+
+    .iframe-instagramcorp {
+        height: 460px;
+        width: 100% !important;
+    }
+
+    .i-frame-short {
+        height: 500px;
+        margin-top: 2em;
+    }
+
+    /*====================================== SECTION VIDEO NETFLIX - MOBILE ======================================*/
+
+    .wsbpnet-section-pad {
+        padding: 0rem 2rem 0rem 2rem;
+    }
+
+    .wsbpnet-hero-text::before {
+        background: none;
+    }
+
+    .wsbpnet-hero-image::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to top,
+            rgba(255, 255, 255, 1) 15%,
+            rgba(255, 255, 255, 0.3) 80%,
+            rgba(255, 255, 255, 0) 100%
+        );
+        z-index: 1;
+    }
+
+    .wsbpnet-hero-jumbotron,
+    .wsbpnet-hero-image,
+    .wsbpnet-hero-image .image img {
+        min-height: 70dvh;
+    }
+
+    .wsbpnet-hero-content .wsbpnet-hero-text,
+    .section-wsbpnet-hero .wsbpnet-pagination-wrapper {
+        padding: 2rem 2rem 4rem 2rem;
+    }
+
+    .section-wsbpnet-new-vid {
+        margin-top: 0rem;
+    }
+
+    .wsbpnet-category-title h3 {
+        max-width: 200px;
+    }
+
+    .wsbpnet-header-wrapper .btn-ws {
+        font-size: 10px;
+    }
+
+    .button-swiper-wsbpnet .wsbpnet-chevron-wrapper-prev::before,
+    .button-swiper-wsbpnet .wsbpnet-chevron-wrapper-next::before {
+        width: 40px;
+    }
+
+    .button-swiper-wsbpnet .wsbpnet-chevron-wrapper-prev .swiper-button-prev {
+        left: 2px;
+    }
+
+    .button-swiper-wsbpnet .wsbpnet-chevron-wrapper-next .swiper-button-next {
+        right: 2px;
+    }
+
+    .wsbpnet-other-episode-card-wrapper {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 1rem;
+    }
+
+    .episode-card-image {
+        width: 100%;
+    }
+
+    .episode-card-number {
+        display: none;
+    }
+
+    #modalWsbpNet .wsbpnet-content-detail {
+        margin-top: 0rem;
+    }
+
+    #modalWsbpNet .wsbpnet-intermezo-content {
+        padding: 2rem 2rem 2rem 2rem;
+    }
+
+    .wsbpnet-intermezo-image,
+    .wsbpnet-intermezo-image .image,
+    .wsbpnet-intermezo-image .image img {
+        min-height: 100%;
+    }
+
+    /*====================================== SECTION NOT FOUND PAGE ======================================*/
+
+    /*====================================== SECTION FOOTER ======================================*/
+    .footer-logo {
+        max-width: 240px !important;
+        margin: 0 auto 16px 0;
+    }
+
+    .footer-menu {
+        justify-content: space-evenly !important;
+        margin: 16px 16px 0 16px;
+    }
+
+    .footer-content-wrapper.footer-content-margin {
+        margin-top: 2.5em;
+    }
+
+    .footer-contact ul {
+        width: 100%;
+        flex-direction: row !important;
+        justify-content: space-evenly;
+        margin: 24px 0;
+    }
+}
+
+@media (min-width: 461px) and (max-width: 767px) {
+}
+
+/* Portrait iPad */
+@media (min-width: 768px) and (max-width: 1024px) {
+    header nav {
+        padding: 10px 5px;
+    }
+
+    .hero-banner {
+        height: 260px;
+    }
+
+    .hero-banner .banner-image {
+        max-width: 12rem;
+    }
+
+    .hero-banner.guest {
+        height: 100vh !important;
+        padding: 32px 0px;
+    }
+
+    .subject-hello {
+        width: 32px;
+        height: 32px;
+        transform: translateY(8px) translateX(2px);
+    }
+
+    .widget-shadow {
+        display: none;
+        right: 8px;
+        bottom: 12px;
+    }
+
+    .widget-shadow h4 {
+        font-size: 10px;
+    }
+
+    section.section-news-internal .nav-pills,
+    section.section-edaran .nav-pills,
+    section.section-edaran-page .nav-pills {
+        display: flex;
+        flex-direction: row;
+        margin: 0 auto;
+        width: 100%;
+        flex-wrap: nowrap;
+        justify-content: start;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+        -ms-overflow-style: none;
+        /* Internet Explorer 10+ */
+        scrollbar-width: none;
+    }
+
+    section.section-news-internal .nav-pills::-webkit-scrollbar,
+    section.section-edaran .nav-pills::-webkit-scrollbar,
+    section.section-edaran-page .nav-pills::-webkit-scrollbar {
+        display: none;
+    }
+
+    .button-swiper {
+        max-width: 110px;
+    }
+
+    #modalStory .modal-header,
+    #modalStory .modal-body,
+    #modalEdaran .modal-header {
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+    }
+
+    .baloon .image {
+        max-width: 80px;
+        width: 100%;
+    }
+
+    .baloon-1 {
+        top: 6%;
+        left: 5%;
+    }
+
+    .baloon-2 {
+        top: 8%;
+        right: 2%;
+    }
+
+    .baloon-3 {
+        top: 70%;
+        left: 3%;
+    }
+
+    .baloon-3 .image {
+        max-width: 128px;
+    }
+
+    .baloon-4 {
+        top: 75%;
+        right: 0%;
+    }
+
+    .col-profile {
+        gap: 0 !important;
+    }
+
+    .profile-card {
+        gap: 8px !important;
+    }
+
+    .row-profile .col-12 {
+        gap: 1rem !important;
+    }
+
+    .profile-card.profile-highlight {
+        margin-bottom: 16px;
+    }
+
+    .col-corporate:nth-child(3) {
+        display: flex;
+        gap: 24px;
+    }
+
+    .col-corporate:nth-child(2) .corporate-card {
+        height: 516px;
+    }
+
+    .corporate-card {
+        height: 250px;
+    }
+
+    .calendar-card .date h3 {
+        font-size: 32px;
+    }
+
+    .col-news:nth-child(1) .news-card {
+        margin-bottom: 24px;
+    }
+
+    .bb-card {
+        height: 320px;
+    }
+
+    .col-bb:nth-child(2) .bb-card {
+        margin-top: 16px;
+    }
+
+    .col-bb:nth-child(2) .bb-card:nth-child(2),
+    .col-bb:nth-child(2) .bb-card:nth-child(3) {
+        width: 48.5%;
+    }
+
+    .swiper-insan .pagination-wrapper__bullet {
+        margin-top: 0;
+    }
+
+    .profile-card {
+        /* flex-direction: column; */
+    }
+
+    .profile-card.profile-highlight {
+        flex-direction: row;
+    }
+
+    .profile-card .image {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .profile-card .image img,
+    .profile-card > .profile-card-img {
+        border: 0 !important;
+    }
+
+    .profile-card.profile-highlight .image img,
+    .profile-card.profile-highlight .profile-card-img {
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 20px;
+    }
+
+    .profile-card > .profile-card-img {
+        max-width: 100% !important;
+    }
+
+    .profile-card .image {
+        height: 224px;
+    }
+
+    .profile-card.profile-highlight .image {
+        height: 100%;
+    }
+
+    .profile-card.profile-highlight .image {
+        max-width: 360px;
+    }
+
+    .profile-card.profile-highlight {
+        max-height: 100%;
+    }
+
+    .profile-card > .desc {
+        padding: 8px 16px 16px 16px;
+        width: 100%;
+    }
+
+    .row-profile .col-12 {
+        gap: 2rem !important;
+    }
+
+    .profile-card.profile-highlight {
+        margin-bottom: 32px;
+    }
+
+    .profile-detail .image .bp-peek {
+        /* right: 68px */
+    }
+
+    .calendar-card .calendar-event .event-list {
+        padding: 8px 0 8px 0;
+    }
+
+    /*====================================== SECTION PERSURATAN ======================================*/
+    .widget-inbox-highlight {
+        justify-content: space-between;
+        margin-bottom: 16px;
+    }
+
+    /*====================================== SECTION EDARAN PAGE ======================================*/
+    .col-edaran-page {
+        flex-direction: column !important;
+    }
+
+    section.section-edaran-page .tab-content {
+        margin-top: 32px !important;
+    }
+
+    /*====================================== SECTION NEWS PAGE ======================================*/
+    .news-highlight {
+        height: 350px;
+    }
+
+    .back-blog-detail {
+        position: static;
+    }
+
+    .back-blog-detail span {
+        display: inline-block;
+    }
+    /*====================================== SECTION BLOG DETAIL PAGE ======================================*/
+    .col-news-detail:nth-child(1) {
+        order: 3;
+    }
+
+    .col-news-detail:nth-child(2) {
+        order: 1;
+    }
+
+    .col-news-detail:nth-child(3) {
+        order: 2;
+    }
+
+    .power-bi-wrapper {
+        margin-top: 0rem;
+    }
+
+    /*====================================== SECTION SOSMED ======================================*/
+    .ig-embed-iframe {
+        height: 328px;
+    }
+
+    .button-swiper-insan {
+        margin-left: auto !important;
+        margin-right: 0 !important;
+    }
+
+    .height-title-wrapper {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .height-title-wrapper .button-swiper {
+        top: 0;
+    }
+
+    .sosmed-card {
+    }
+
+    .swiper-video-youtube {
+        padding: 0em 0px;
+        margin-bottom: 2rem;
+    }
+
+    .linkdn-container {
+        padding-top: 0 !important;
+    }
+
+    /*====================================== SECTION VIDEO NETFLIX - IPAD POTRAIT ======================================*/
+
+    .button-swiper-wsbpnet .wsbpnet-chevron-wrapper-prev::before,
+    .button-swiper-wsbpnet .wsbpnet-chevron-wrapper-next::before {
+        width: 40px;
+    }
+
+    .button-swiper-wsbpnet .wsbpnet-chevron-wrapper-prev .swiper-button-prev {
+        left: 2px;
+    }
+
+    .button-swiper-wsbpnet .wsbpnet-chevron-wrapper-next .swiper-button-next {
+        right: 2px;
+    }
+
+    .wsbpnet-other-episode-card-wrapper {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 1rem;
+    }
+
+    .episode-card-image {
+        width: 100%;
+    }
+
+    .episode-card-number {
+        display: none;
+    }
+
+    #modalWsbpNet .wsbpnet-content-detail {
+        margin-top: 0rem;
+    }
+
+    #modalWsbpNet .wsbpnet-intermezo-content {
+        padding: 2rem 2rem 2rem 2rem;
+    }
+
+    .wsbpnet-intermezo-image,
+    .wsbpnet-intermezo-image .image,
+    .wsbpnet-intermezo-image .image img {
+        min-height: 50dvh;
+    }
+    /*====================================== SECTION FOOTER ======================================*/
+    footer {
+        margin-top: -3px;
+    }
+
+    .footer-content-wrapper.footer-content-margin {
+        margin-top: 2.5em;
+    }
+
+    .footer-logo {
+        max-width: 256px;
+        margin: 0 auto 24px auto;
+    }
+
+    .footer-contact {
+        margin: 32px 0;
+    }
+
+    .footer-menu {
+        margin: 32px 16px 16px 16px;
+    }
+}
+
+/* Landscape iPad Air and another Tab */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1180px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
+    .profile-detail .image .bp-peek {
+        right: 70px;
+    }
+
+    .widget-shadow {
+        display: block;
+        right: 16px;
+        bottom: 32px;
+    }
+
+    .hero-banner.guest {
+        height: 100vh !important;
+        padding: 32px 0px;
+    }
+
+    .widget-shadow h4 {
+        font-size: 10px !important;
+    }
+
+    .swiper-video-youtube {
+        padding: 5.1em 0px;
+    }
+
+    .row-profile {
+        gap: 16px;
+    }
+
+    .swiper-calendar {
+        padding-top: 0 !important;
+        /* padding-bottom: 0 !important; */
+    }
+
+    .col-news:nth-child(2) .news-card .image {
+        width: 200px;
+    }
+
+    .back-blog-detail {
+        position: absolute;
+    }
+
+    .back-blog-detail span {
+        display: none;
+    }
+
+    .col-video-internal {
+        flex-direction: column;
+    }
+
+    .col-swiper-insan .button-swiper-insan {
+        margin-top: -48px !important;
+    }
+
+    .col-video-internal .link-web {
+        margin-top: 8px;
+        width: 100%;
+        margin-left: auto;
+        justify-content: start;
+    }
+
+    .height-title-wrapper .button-swiper {
+        top: -12px;
+    }
+
+    .height-title-wrapper {
+        margin-bottom: 26px;
+    }
+
+    .swiper-video-youtube {
+        padding: 0;
+    }
+
+    .row-profile .col-12 {
+        gap: 1rem !important;
+    }
+
+    .profile-card.profile-highlight {
+        margin-bottom: 16px;
+    }
+
+    /*====================================== SECTION PERSURATAN ======================================*/
+    .widget-inbox-highlight {
+        margin-bottom: 16px;
+        justify-content: space-between;
+    }
+
+    /*====================================== SECTION EDARAN PAGE ======================================*/
+    .col-edaran-page {
+        flex-direction: row !important;
+    }
+
+    section.section-edaran-page .tab-content {
+        margin-top: 48px !important;
+    }
+
+    /*====================================== SECTION Footer ======================================*/
+    .footer-content-wrapper.footer-content-margin {
+        margin-top: 0em;
+    }
+}
+
+/* Landscape iPad Mini & Tab */
+@media only screen and (max-device-width: 1024px) and (orientation: landscape) and (-webkit-min-device-pixel-ratio: 1) {
+    .widget-shadow {
+        display: block;
+        right: 16px;
+        bottom: 32px;
+    }
+
+    .col-corporate:nth-child(3) {
+        display: block;
+    }
+
+    .bb-card {
+        height: 515px;
+    }
+
+    .row-profile .col-12 {
+        gap: 1rem !important;
+    }
+
+    .profile-card.profile-highlight {
+        margin-bottom: 16px;
+    }
+
+    .col-bb:nth-child(2) .bb-card:nth-child(2),
+    .col-bb:nth-child(2) .bb-card:nth-child(3) {
+        width: 47.5%;
+    }
+
+    .col-bb:nth-child(2) .bb-card {
+        height: 234px;
+    }
+
+    .height-title-wrapper {
+        flex-direction: column;
+        height: 68px;
+        align-items: end;
+        margin-bottom: 0;
+    }
+
+    .height-title-wrapper .button-swiper {
+        top: -8px;
+    }
+
+    .swiper-video-internal .pagination-wrapper__bullet {
+        margin-top: 0;
+    }
+
+    .swiper-video-youtube {
+        padding: 0em 0;
+    }
+
+    /*====================================== SECTION PERSURATAN ======================================*/
+    .widget-inbox-highlight {
+        margin-bottom: 16px;
+        justify-content: space-between;
+    }
+}
+
+/* 11-12 Inch */
+@media (min-width: 1024px) and (max-width: 1152px) {
+    .widget-shadow {
+        display: block;
+    }
+
+    .widget-shadow {
+        right: 16px;
+        bottom: 32px;
+    }
+
+    .widget-shadow h4 {
+        font-size: 12px;
+    }
+
+    .col-corporate:nth-child(3) {
+        display: block;
+    }
+
+    .col-news:nth-child(2) .news-card .image {
+        max-width: 200px;
+    }
+
+    .bb-card {
+        height: 500px;
+    }
+
+    .col-bb:nth-child(2) .bb-card:nth-child(2),
+    .col-bb:nth-child(2) .bb-card:nth-child(3) {
+        width: 47.5%;
+    }
+
+    .col-bb:nth-child(2) .bb-card {
+        height: 234px;
+    }
+}
+
+/* >16 Inch */
+@media (min-width: 1550px) {
+}

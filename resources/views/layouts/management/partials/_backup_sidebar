@@ -1,0 +1,144 @@
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+    <div class="app-brand demo">
+        <a href="{{ url('management/dashboard') }}" class="app-brand-link">
+            <img src="{{ asset('images/general/logo-mix-black.png') }}" alt="rumahbaru.co Assets" class="w-100">
+        </a>
+
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+        </a>
+    </div>
+
+    <div class="menu-inner-shadow"></div>
+
+    <ul class="menu-inner py-1">
+        <!-- Dashboard -->
+        <li class="menu-item {{ Request::segment(2) == 'dashboard' ? 'active' : '' }}">
+            <a href="{{ url('management/dashboard') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div data-i18n="Analytics">Dashboard</div>
+            </a>
+        </li>
+        <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Pages</span>
+        </li>
+        <li class="menu-item {{ Request::segment(2) == 'booker' ? 'active' : '' }}">
+            <a href="{{ url('management/booker') }}" class="menu-link">
+                <i class='menu-icon tf-icons bx bx-user-circle'></i>
+                <div data-i18n="Analytics">Data Pemesan</div>
+            </a>
+        </li>
+        <li class="menu-item {{ Request::segment(2) == 'master' ? 'open' : '' }}">
+            <a href="#" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons bx bx-dock-top"></i>
+                <div data-i18n="Account Settings">Master</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item {{ Request::segment(3) == 'management-user' ? 'active open' : '' }}">
+                    <a href="{{ url('management/master/management-user') }}" class="menu-link">
+                        <div data-i18n="Account">Management User</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ Request::segment(3) == 'city' ? 'active open' : '' }}">
+                    <a href="{{ url('management/master/city') }}" class="menu-link">
+                        <div data-i18n="Account">Kota</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ Request::segment(3) == 'seat-plan' ? 'active open' : '' }}">
+                    <a href="{{ url('management/master/seat-plan') }}" class="menu-link">
+                        <div data-i18n="Account">Denah Kursi</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ Request::segment(3) == 'armada' ? 'active open' : '' }}">
+                    <a href="{{ url('management/master/armada') }}" class="menu-link">
+                        <div data-i18n="Account">Armada</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ Request::segment(3) == 'gallery-armada' ? 'active open' : '' }}">
+                    <a href="{{ url('management/master/gallery-armada') }}" class="menu-link">
+                        <div data-i18n="Account">Gallery Armada</div>
+                    </a>
+                </li>
+
+        </li>
+    </ul>
+    <li class="menu-item {{ Request::segment(2) == 'route' ? 'active' : '' }}">
+        <a href="{{ url('management/route') }}" class="menu-link">
+            <i class="menu-icon tf-icons bx bxs-navigation"></i>
+            <div data-i18n="Analytics">Rute</div>
+        </a>
+    </li>
+    <li class="menu-item {{ Request::segment(2) == 'schedule' ? 'active' : '' }}">
+        <a href="{{ url('management/schedule') }}" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-calendar"></i>
+            <div data-i18n="Analytics">Jadwal</div>
+        </a>
+    </li>
+    <li class="menu-item {{ Request::segment(2) == 'faq' ? 'active' : '' }}">
+        <a href="{{ url('management/faq') }}" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-chat"></i>
+            <div data-i18n="Analytics">FAQ</div>
+        </a>
+    </li>
+    {{-- <li class="menu-item {{ Request::segment(2) == 'voucher' ? 'active' : '' }}">
+        <a href="{{ url('management/voucher') }}" class="menu-link">
+            <i class="menu-icon tf-icons bx bxs-coupon"></i>
+            <div data-i18n="Analytics">Voucher</div>
+        </a>
+    </li> --}}
+    <li class="menu-item  {{ Request::segment(2) == 'transaction' ? 'open' : '' }}">
+        <a href="#" class="menu-link menu-toggle">
+            <i class="menu-icon tf-icons bx bx-transfer-alt"></i>
+            <div data-i18n="Account Settings">Transaksi</div>
+        </a>
+        <ul class="menu-sub">
+            <li class="menu-item {{ Request::segment(3) == 'order-ticket' ? 'active open' : '' }}">
+                <a href="{{ url('management/transaction/order-ticket') }}" class="menu-link">
+                    <div data-i18n="Account">Pembelian Tiket</div>
+                </a>
+            </li>
+            <li class="menu-item {{ Request::segment(3) == 'send-package' ? 'active open' : '' }}">
+                <a href="{{ url('management/transaction/send-package') }}" class="menu-link">
+                    <div data-i18n="Account">Kirim Paket</div>
+                </a>
+            </li>
+            <li class="menu-item {{ Request::segment(3) == 'history-order-ticket' ? 'active open' : '' }}">
+                <a href="{{ url('management/transaction/history-order-ticket') }}" class="menu-link">
+                    <div data-i18n="Account">Riwayat Pembelian Tiket</div>
+                </a>
+            </li>
+            {{-- <li class="menu-item {{ Request::segment(3) == 'history-send-package' ? 'active open' : '' }}">
+                <a href="{{ url('management/transaction/history-send-package') }}" class="menu-link">
+                    <div data-i18n="Account">Riwayat Kirim Paket</div>
+                </a>
+            </li> --}}
+            {{-- <li class="menu-item {{ Request::segment(3) == 'order-baggage' ? 'active open' : '' }}">
+                <a href="{{ url('management/transaction/order-baggage') }}" class="menu-link">
+                    <div data-i18n="Account">Pembelian Bagasi</div>
+                </a>
+            </li>
+            <li class="menu-item {{ Request::segment(3) == 'order-history-baggage' ? 'active open' : '' }}">
+                <a href="{{ url('management/transaction/order-history-baggage') }}" class="menu-link">
+                    <div data-i18n="Account">Riwayat Pembelian Bagasi</div>
+                </a>
+            </li> --}}
+           
+        </ul>
+    </li>
+    <li class="menu-item  {{ Request::segment(2) == 'settings' ? 'open' : '' }}">
+        <a href="#" class="menu-link menu-toggle">
+            <i class="menu-icon tf-icons bx bx-cog"></i>
+            <div data-i18n="Account Settings">Setting</div>
+        </a>
+        <ul class="menu-sub">
+            <li class="menu-item {{ Request::segment(3) == 'general' ? 'active open' : '' }}">
+                <a href="{{ url('management/settings/general') }}" class="menu-link">
+                    <div data-i18n="Account">General Setting</div>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+
+    </ul>
+</aside>

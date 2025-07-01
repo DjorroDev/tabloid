@@ -84,17 +84,32 @@
             /* penting */
             border: 1px solid #ccc;
             overflow: hidden;
+            /* Tambahkan agar tidak pernah mengecil/membesar */
+            /* width: 210mm;
+            height: 297mm;
+            min-width: 210mm;
+            min-height: 297mm;
+            max-width: 210mm;
+            max-height: 297mm; */
         }
 
         .paper-canvas.a4-landscape {
-            width: 1123px;
-            height: 794px;
+            width: 297mm;
+            height: 210mm;
+            min-width: 297mm;
+            min-height: 210mm;
+            max-width: 297mm;
+            max-height: 210mm;
         }
 
         .paper-canvas.a4-portrait {
             margin-top: 200px;
-            width: 794px;
-            height: 1123px;
+            width: 210mm;
+            height: 297mm;
+            min-width: 210mm;
+            min-height: 297mm;
+            /* max-width: 210mm;
+            max-height: 297mm; */
         }
 
         .draggable-layout {
@@ -199,7 +214,13 @@
                 <button id="next-page" class="btn btn-secondary btn-sm ms-2">Berikutnya ›</button>
                 <button id="add-page" class="btn btn-primary btn-sm mt-2 w-100">Tambah Halaman Baru</button>
             </div>
-            <a href="/">Ke Gridstack</a>
+            <h3>Template</h3>
+            <div class="template">
+                <select id="template-select"></select>
+                <input value="" placeholder="Nama template" id="template-name" type="text" />
+                <button id="save-template" class="btn btn-primary">Simpan sebagai template</button>
+            </div>
+            {{-- <a href="/">Ke Gridstack</a> --}}
         </div>
         <div class="main-content">
             <div class="paper-canvas a4-portrait" id="canvas"></div>
@@ -241,70 +262,73 @@
             }
             $('#close-editor').on('click', hideEditorSidebar);
 
-            // Pilih layout box (draggable-layout) atau konten di dalamnya
-            $(document).on('click', '.draggable-layout', function(e) {
-                e.stopPropagation();
-                let $target = $(e.target);
-                console.log($target)
-                let $layout = $(this);
-                let $content = null;
-                let type = null;
-                $content = $target;
-                type = 'content';
-                // Cek jika klik pada konten di dalam layout
-                if ($target.hasClass('content-text')) {
-                    console.log('pante1')
-                    $content = $target;
-                    type = 'text';
-                } else if ($target.hasClass('content-image')) {
-                    console.log('pante3')
-                    $content = $target;
-                    type = 'image';
-                }
+            // Fungsi reusable untuk melampirkan event handler klik ke elemen konten
+            function attachContentClickHandlers($contentElement, type) {
+                $contentElement.on('click', e => {
+                    e
+                        .stopPropagation(); // Hentikan propagasi agar tidak memicu handler layout atau document
+                    selectedBox = $contentElement;
+                    selectedType = type;
+                    showEditorSidebar();
 
-                //    let contentEl = $layout[0].querySelector('.content-text, .content-title, .content-image');
-                // if (contentEl && contentEl.contains($target[0])) {
-                //     if (contentEl.classList.contains('content-text')) {
-                //         console.log()
-                //         $content = $(contentEl);
-                //         type = 'text';
-                //     } else if (contentEl.classList.contains('content-title')) {
-                //         $content = $(contentEl);
-                //         type = 'title';
-                //     } else if (contentEl.classList.contains('content-image')) {
-                //         $content = $(contentEl);
-                //         type = 'image';
-                //     }
-                // }
-                // if ($target.hasClass('content-image')) {
-                //     console.log('pante3')
-                //     $content = $target;
-                //     type = 'image';
-                // }
+                    if (type === 'text' || type === 'title') {
+                        $('#ckeditor-area').show();
+                        editor.setData($contentElement.html());
+                        $('#editor-info').text(`Mengedit: ${selectedType.toUpperCase()}`);
+                        $('#editor-action').html(`
+                            <button id="delete-layout" class="btn btn-danger btn-sm mb-2">Hapus Layout</button>
+                            <button id="delete-content" class="btn btn-warning btn-sm mb-2 ms-2">Hapus Konten</button>
+                        `);
+                    } else if (type === 'image') {
+                        $('#ckeditor-area').hide(); // CKEditor tidak untuk gambar
+                        $('#editor-info').text(
+                            `Mengedit: ${selectedType.toUpperCase()} (Klik untuk ganti URL gambar)`);
+                        $('#editor-action').html(`
+                            <button id="delete-layout" class="btn btn-danger btn-sm mb-2">Hapus Layout</button>
+                            <button id="delete-content" class="btn btn-warning btn-sm mb-2 ms-2">Hapus Konten</button>
+                            <input type="text" id="image-url-input" class="form-control mt-2" placeholder="URL Gambar Baru" value="${selectedBox.attr('src')}">
+                            <button id="update-image-url" class="btn btn-success btn-sm mt-2">Perbarui Gambar</button>
+                        `);
+                    }
+                });
+            }
+
+            // Hapus semua handler klik sebelumnya pada .draggable-layout yang umum
+            // dan ganti dengan pendekatan yang lebih spesifik
+            $(document).off('click', '.draggable-layout'); // Hapus handler lama
+
+            // Event delegation untuk klik pada area kosong inner-layout-box atau placeholder
+            // Ini akan memilih layout box itu sendiri jika tidak ada konten yang diklik.
+            $(document).on('click', '.inner-layout-box, .content-placeholder', function(e) {
+                e.stopPropagation(); // Hentikan propagasi agar tidak memicu event di parent
+
+                let $layout = $(this).closest('.draggable-layout');
                 selectedBox = $layout;
                 selectedType = 'layout';
                 showEditorSidebar();
-                let actionHtml =
-                    '<button id="delete-layout" class="btn btn-danger btn-sm mb-2">Hapus Layout</button>';
-                if ($content) {
-                    selectedBox = $content;
-                    selectedType = type;
-                    actionHtml +=
-                        ' <button id="delete-content" class="btn btn-warning btn-sm mb-2 ms-2">Hapus Konten</button>';
-                }
-                $('#editor-action').html(actionHtml);
-                if (type === 'text') {
-                    $('#ckeditor-area').show();
-                    editor.setData($content.html());
-                } else {
-                    $('#ckeditor-area').hide();
-                }
-                if (type) {
-                    $('#editor-info').text('Mengedit');
-                } else {
-                    $('#editor-info').text('Layout terpilih.');
+                $('#ckeditor-area').hide(); // Sembunyikan CKEditor jika hanya layout yang dipilih
+                $('#editor-info').text('Layout terpilih.');
+                $('#editor-action').html(
+                    '<button id="delete-layout" class="btn btn-danger btn-sm mb-2">Hapus Layout</button>'
+                );
+            });
+
+
+            // Handler untuk update URL gambar
+            $(document).on('click', '#update-image-url', function() {
+                if (selectedBox && selectedType === 'image') {
+                    const newUrl = $('#image-url-input').val();
+                    if (newUrl) {
+                        selectedBox.attr('src', newUrl);
+                        selectedBox.attr('alt', 'Gambar dari URL baru');
+                        saveCurrentPage();
+                        alert('URL Gambar diperbarui!');
+                    } else {
+                        alert('Masukkan URL gambar yang valid.');
+                    }
                 }
             });
+
             // Hapus layout
             $(document).on('click', '#delete-layout', function() {
                 if (selectedBox) {
@@ -313,29 +337,32 @@
                         .closest('.draggable-layout');
                     $layout.remove();
                     hideEditorSidebar();
+                    saveCurrentPage(); // Simpan perubahan setelah menghapus layout
                 }
             });
 
             // Hapus konten
             $(document).on('click', '#delete-content', function() {
-                if (selectedBox && (selectedType === 'text' || selectedType ===
-                        'image')) {
+                if (selectedBox && (selectedType === 'text' || selectedType === 'image' || selectedType ===
+                        'title')) {
                     let $layout = selectedBox.closest('.draggable-layout');
                     selectedBox.remove();
                     // Jika layout kosong, tambahkan placeholder
-                    if ($layout.find('.content-text, .content-image').length === 0) {
+                    if ($layout.find('.content-text, .content-title, .content-image').length === 0) {
                         $layout.find('.inner-layout-box').append(
                             '<div class="content-placeholder">Drop Konten Di Sini</div>');
                     }
-                    // hideEditorSidebar();
+                    saveCurrentPage(); // Simpan perubahan setelah menghapus konten
+                    hideEditorSidebar();
                 }
             });
-            // // Sembunyikan editor jika klik di luar layout/konten/editor
-            // $(document).on('click', function(e) {
-            //     if (!$(e.target).closest('.draggable-layout, #editor-sidebar').length) {
-            //         hideEditorSidebar();
-            //     }
-            // });
+
+            // Sembunyikan editor jika klik di luar layout/konten/editor
+            $(document).on('click', function(e) {
+                if (!$(e.target).closest('.draggable-layout, #editor-sidebar').length) {
+                    hideEditorSidebar();
+                }
+            });
 
             const COLS = 36;
             const ROWS = 40;
@@ -349,37 +376,7 @@
             let loadedPagesData = {}; // Objek untuk menyimpan semua data halaman yang
 
             // unique id
-            let layoutIdCounter = 0;
-
-            function snapClamp(ui, $el) {
-                // hitung posisi snapped
-                let left = Math.floor(ui.position.left / GRID) * GRID;
-                let top = Math.floor(ui.position.top / GRID) * GRID;
-                // clamp agar tidak keluar
-                left = Math.min(Math.max(0, left), canvasW - $el.outerWidth());
-                top = Math.min(Math.max(0, top), canvasH - $el.outerHeight());
-                $el.css({
-                    left,
-                    top
-                });
-
-                // --- KLAMP DIMENSI (khusus untuk resizable) ---
-                // Jika elemen ini di-resize (yaitu, memiliki ui.size dari resizable)
-                if (ui.size) {
-                    let width = Math.round(ui.size.width / GRID) * GRID;
-                    let height = Math.round(ui.size.height / GRID) * GRID;
-
-                    // Pastikan ukuran tidak membuat elemen keluar batas
-                    width = Math.min(width, canvasW - left); // width tidak boleh melebihi sisa ruang kanan
-                    height = Math.min(height, canvasH - top); // height tidak boleh melebihi sisa ruang bawah
-
-                    $el.css({
-                        width: width,
-                        height: height
-                    });
-                }
-            }
-
+            let layoutIdCounter = 0; // Inisialisasi counter
 
             function snapClampCols(ui, $el) {
                 // posisi kiri snapped ke kelipatan kolom
@@ -483,6 +480,7 @@
                             stop(e, ui) {
                                 snapClampCols(ui, $(this));
                                 snapClampRows(ui, $(this));
+                                saveCurrentPage(); // Simpan setelah drag
                             }
                         })
                         .resizable({
@@ -493,6 +491,7 @@
                             stop(e, ui) {
                                 snapClampCols(ui, $(this));
                                 snapClampRows(ui, $(this));
+                                saveCurrentPage(); // Simpan setelah resize
                             }
                         });
                     $('#canvas').append($layout);
@@ -502,35 +501,38 @@
                         accept: '.content-template',
                         hoverClass: 'highlight-dropzone',
                         drop(ev, uii) {
-                            if ($inner.find('.content-text, .content-image').length)
+                            if ($inner.find('.content-text, .content-title, .content-image').length)
                                 return;
                             $inner.find('.content-placeholder').remove();
                             const type = uii.helper.data('content-type');
-                            let $content;
+                            let $newContent;
                             if (type === 'text') {
-                                $content = $(
+                                $newContent = $(
                                     '<div class="content-text" data-content-id="text-' + Date
                                     .now() + '">Ketik teks Anda di sini...</div>'
                                 );
                             } else if (type === 'image') {
-                                $content = $(
-                                    '<img class="content-image" src="/image.png" alt="Gambar" data-content-id="text-' +
-                                    Date.now() + '">'
+                                $newContent = $(
+                                    '<img class="content-image" src="/image.png" alt="Gambar" data-content-id="image-' +
+                                    Date.now() +
+                                    '">' // Changed data-content-id prefix to 'image-'
+                                );
+                            } else if (type === 'title') { // Tambah untuk title jika ada
+                                $newContent = $(
+                                    '<div class="content-title" data-content-id="title-' + Date
+                                    .now() + '">Judul Tabloid Baru</div>'
                                 );
                             }
-                            if ($content) {
-                                $inner.append($content);
-                                if (type === 'text') {
-                                    $content.on('click', e => {
-                                        e.stopPropagation();
-                                        selectedBox = $content;
-                                        selectedType = type;
-                                        editor.setData($content.html());
-                                    });
-                                }
+
+                            if ($newContent) {
+                                $inner.append($newContent);
+                                attachContentClickHandlers($newContent,
+                                    type); // Panggil fungsi reusable
+                                saveCurrentPage(); // Simpan setelah drop konten
                             }
                         }
                     });
+                    saveCurrentPage(); // Simpan setelah drop layout
                 }
             });
 
@@ -547,12 +549,13 @@
 
             // Edit via delegation (CKEditor)
             editor.on('change', () => {
-                if (selectedBox && (selectedType === 'text')) {
+                if (selectedBox && (selectedType === 'text' || selectedType === 'title')) {
                     selectedBox.html(editor.getData());
                 }
+                saveCurrentPage(); // Simpan setelah perubahan editor
             });
 
-            function saveLayout() {
+            function saveCurrentPage() {
                 const layoutData = [];
                 $('.draggable-layout').each(function() {
                     const $layout = $(this);
@@ -560,6 +563,13 @@
                     const position = $layout.position(); // Mendapatkan top dan left relatif terhadap parent
                     const width = $layout.outerWidth();
                     const height = $layout.outerHeight();
+
+                    // Convert pixel positions and dimensions back to grid units
+                    const colStart = Math.round(position.left / colWidth);
+                    const rowStart = Math.round(position.top / rowHeight);
+                    const spanCols = Math.round(width / colWidth);
+                    const spanRows = Math.round(height / rowHeight);
+
 
                     const content = {}; // Objek untuk menyimpan detail konten
                     const $contentElement = $layout.find('.content-text, .content-title, .content-image');
@@ -581,181 +591,11 @@
 
                     layoutData.push({
                         id: layoutId, // Simpan ID untuk referensi
-                        top: position.top,
-                        left: position.left,
-                        width: width,
-                        height: height,
+                        colStart: colStart,
+                        rowStart: rowStart,
+                        spanCols: spanCols,
+                        spanRows: spanRows,
                         content: content // Sertakan data konten
-                    });
-                });
-
-                console.log("Data layout yang akan disimpan:", layoutData); // Untuk debug
-
-                // Contoh: Simpan ke LocalStorage
-                localStorage.setItem('savedTabloidLayout', JSON.stringify(layoutData));
-                alert('Layout disimpan!');
-            }
-
-            function loadLayout() {
-                const savedData = localStorage.getItem('savedTabloidLayout');
-                if (!savedData) {
-                    console.log("Tidak ada layout yang disimpan.");
-                    return;
-                }
-
-                // Bersihkan canvas sebelum memuat ulang
-                $('#canvas').empty();
-
-                const layoutData = JSON.parse(savedData);
-                layoutData.forEach(item => {
-                    const $layout = $('<div class="draggable-layout" id="' + item.id + '"></div>').css({
-                        position: 'absolute',
-                        top: item.top,
-                        left: item.left,
-                        width: item.width,
-                        height: item.height
-                    });
-
-                    const $inner = $('<div class="inner-layout-box"></div>');
-
-                    // Rekonstruksi konten
-                    if (item.content && item.content.type) {
-                        let $content;
-                        if (item.content.type === 'text') {
-                            $content = $('<div class="content-text" data-content-id="text-' + Date.now() +
-                                '">' + item.content.html + '</div>');
-                        } else if (item.content.type === 'title') {
-                            $content = $('<div class="content-title" data-content-id="title-' + Date.now() +
-                                '">' + item.content.html + '</div>');
-                        } else if (item.content.type === 'image') {
-                            $content = $('<img class="content-image" src="' + item.content.src + '" alt="' +
-                                item.content.alt + '" data-content-id="image-' + Date.now() + '">');
-                        }
-                        $inner.append($content);
-
-                        // Re-attach click handlers for editing
-                        if (item.content.type === 'text' || item.content.type === 'title') {
-                            $content.on('click', e => {
-                                e.stopPropagation();
-                                selectedBox = $content;
-                                selectedType = item.content.type;
-                                editor.setData($content.html());
-                            });
-                        } else if (item.content.type === 'image') {
-                            $content.on('click', e => {
-                                e.stopPropagation();
-                                selectedBox = $content;
-                                selectedType = item.content.type;
-                                editor.setData(`<img src="${$content.attr('src')}" />`);
-                            });
-                        }
-                    } else {
-                        $inner.append('<div class="content-placeholder">Drop Konten Di Sini</div>');
-                    }
-
-                    $layout.append($inner)
-                        .draggable({
-                            axis: false,
-                            containment: '#canvas',
-                            handle: '.inner-layout-box',
-                            stop(e, ui) {
-                                snapClampCols(ui, $(this));
-                                snapClampRows(ui, $(this));
-                            }
-                        })
-                        .resizable({
-                            handles: 'all',
-                            containment: '#canvas',
-                            minWidth: colWidth,
-                            minHeight: rowHeight,
-                            stop(e, ui) {
-                                snapClampCols(ui, $(this));
-                                snapClampRows(ui, $(this));
-                            }
-                        });
-                    $('#canvas').append($layout);
-
-                    // Re-attach droppable for inner-layout-box
-                    $inner.droppable({
-                        accept: '.content-template',
-                        hoverClass: 'highlight-dropzone',
-                        drop(ev, uii) {
-                            if ($inner.find('.content-text, .content-title, .content-image').length)
-                                return;
-                            $inner.find('.content-placeholder').remove();
-                            const type = uii.helper.data('content-type');
-                            let $newContent;
-                            if (type === 'text') {
-                                $newContent = $(
-                                    '<div class="content-text">Ketik teks Anda di sini...</div>'
-                                );
-                            } else if (type === 'title') {
-                                $newContent = $(
-                                    '<div class="content-title">Judul Tabloid Baru</div>');
-                            } else if (type === 'image') {
-                                $newContent = $(
-                                    '<img class="content-image" src="/image.png" alt="Gambar">');
-                            }
-                            if ($newContent) {
-                                $inner.append($newContent);
-                                if (type === 'text' || type === 'title') {
-                                    $newContent.on('click', e => {
-                                        e.stopPropagation();
-                                        selectedBox = $newContent;
-                                        selectedType = type;
-                                        editor.setData($newContent.html());
-                                    });
-                                } else if (type === 'image') {
-                                    $newContent.on('click', e => {
-                                        e.stopPropagation();
-                                        selectedBox = $newContent;
-                                        selectedType = type;
-                                        editor.setData(
-                                            `<img src="${$newContent.attr('src')}" />`);
-                                    });
-                                }
-                            }
-                        }
-                    });
-                });
-                alert('Layout dimuat!');
-            }
-
-
-            function saveCurrentPage() {
-                const layoutData = [];
-                $('.draggable-layout').each(function() {
-                    const $layout = $(this);
-                    const layoutId = $layout.attr('id');
-                    const position = $layout.position();
-                    const width = $layout.outerWidth();
-                    const height = $layout.outerHeight();
-
-                    const content = {};
-                    const $contentElement = $layout.find('.content-text, .content-title, .content-image');
-
-                    if ($contentElement.length) {
-                        const contentType = $contentElement.data('content-type') ||
-                            ($contentElement.hasClass('content-text') ? 'text' :
-                                $contentElement.hasClass('content-title') ? 'title' :
-                                $contentElement.hasClass('content-image') ? 'image' : null);
-
-                        content.type = contentType;
-                        if (contentType === 'text' || contentType === 'title') {
-                            content.html = $contentElement.html();
-                        } else if (contentType === 'image') {
-                            content.src = $contentElement.attr('src');
-                            content.alt = $contentElement.attr('alt');
-                        }
-                    }
-
-                    layoutData.push({
-                        id: layoutId,
-                        top: position.top,
-                        left: position.left,
-                        width: width,
-                        height: height,
-                        content: content
                     });
                 });
 
@@ -786,19 +626,23 @@
                 if (!pageData) {
                     console.log(`Tidak ada data untuk halaman: ${pageId}. Membuat halaman kosong.`);
                     $('#editor-info').text(`Halaman ${pageId} kosong.`);
+                    hideEditorSidebar();
                     return; // Halaman kosong, tidak ada yang perlu dirender
                 }
 
                 pageData.forEach(item => {
-                    // Logika pembuatan $layout, $inner, dan konten $content
-                    // Sama persis dengan fungsi loadLayout() Anda yang sekarang,
-                    // Cukup pindahkan logika itu ke sini.
+                    // Konversi unit grid kembali ke piksel
+                    const leftPX = item.colStart * colWidth;
+                    const topPX = item.rowStart * rowHeight;
+                    const widthPX = item.spanCols * colWidth;
+                    const heightPX = item.spanRows * rowHeight;
+
                     const $layout = $('<div class="draggable-layout" id="' + item.id + '"></div>').css({
                         position: 'absolute',
-                        top: item.top,
-                        left: item.left,
-                        width: item.width,
-                        height: item.height
+                        top: topPX,
+                        left: leftPX,
+                        width: widthPX,
+                        height: heightPX
                     });
 
                     const $inner = $('<div class="inner-layout-box"></div>');
@@ -817,28 +661,7 @@
                         }
                         $inner.append($content);
 
-                        // Re-attach click handlers for editing (PENTING!)
-                        if (item.content.type === 'text' || item.content.type === 'title') {
-                            $content.on('click', e => {
-                                e.stopPropagation();
-                                selectedBox = $content;
-                                selectedType = item.content.type;
-                                editor.setData($content.html());
-                                showEditorSidebar();
-                                $('#editor-info').text(`Mengedit: ${selectedType.toUpperCase()}`);
-                            });
-                        } else if (item.content.type === 'image') {
-                            $content.on('click', e => {
-                                e.stopPropagation();
-                                selectedBox = $content;
-                                selectedType = item.content.type;
-                                editor.setData(`<img src="${$content.attr('src')}" />`);
-                                showEditorSidebar();
-                                $('#editor-info').text(
-                                    `Mengedit: ${selectedType.toUpperCase()} (Klik untuk ganti URL gambar)`
-                                );
-                            });
-                        }
+                        attachContentClickHandlers($content, item.content.type); // Panggil fungsi reusable
                     } else {
                         $inner.append('<div class="content-placeholder">Drop Konten Di Sini</div>');
                     }
@@ -851,7 +674,6 @@
                             stop(e, ui) {
                                 snapClampCols(ui, $(this));
                                 snapClampRows(ui, $(this));
-                                // Panggil saveCurrentPage() setelah drag/resize
                                 saveCurrentPage();
                             }
                         })
@@ -863,13 +685,12 @@
                             stop(e, ui) {
                                 snapClampCols(ui, $(this));
                                 snapClampRows(ui, $(this));
-                                // Panggil saveCurrentPage() setelah drag/resize
                                 saveCurrentPage();
                             }
                         });
                     $('#canvas').append($layout);
 
-                    // Re-attach droppable for inner-layout-box (PENTING!)
+                    // Re-attach droppable for inner-layout-box
                     $inner.droppable({
                         accept: '.content-template',
                         hoverClass: 'highlight-dropzone',
@@ -892,30 +713,8 @@
                             }
                             if ($newContent) {
                                 $inner.append($newContent);
-                                if (type === 'text' || type === 'title') {
-                                    $newContent.on('click', e => {
-                                        e.stopPropagation();
-                                        selectedBox = $newContent;
-                                        selectedType = type;
-                                        editor.setData($newContent.html());
-                                        showEditorSidebar();
-                                        $('#editor-info').text(
-                                            `Mengedit: ${selectedType.toUpperCase()}`);
-                                    });
-                                } else if (type === 'image') {
-                                    $newContent.on('click', e => {
-                                        e.stopPropagation();
-                                        selectedBox = $newContent;
-                                        selectedType = type;
-                                        editor.setData(
-                                            `<img src="${$newContent.attr('src')}" />`);
-                                        showEditorSidebar();
-                                        $('#editor-info').text(
-                                            `Mengedit: ${selectedType.toUpperCase()} (Klik untuk ganti URL gambar)`
-                                        );
-                                    });
-                                }
-                                // Panggil saveCurrentPage() setelah drop konten baru
+                                attachContentClickHandlers($newContent,
+                                    type); // Panggil fungsi reusable
                                 saveCurrentPage();
                             }
                         }
@@ -939,17 +738,191 @@
                 }
             }
 
+            function loadTemplateList() {
+                const all = JSON.parse(localStorage.getItem('tabloidTemplates') || '{}');
+                const $sel = $('#template-select').empty();
+                $sel.append('<option value="">-- Pilih Template --</option>');
+                Object.keys(all).forEach(name => {
+                    $sel.append(`<option value="${name}">${name}</option>`);
+                });
+            }
+
+            function saveTemplate() {
+                const name = $('#template-name').val().trim();
+                if (!name) return alert('Masukkan nama template.');
+
+                // Ambil layout current
+                const layouts = $('.draggable-layout').map(function() {
+                    const $b = $(this);
+                    const position = $b.position();
+
+                    const colStart = Math.round(position.left / colWidth);
+                    const rowStart = Math.round(position.top / rowHeight);
+                    const spanCols = Math.round($b.outerWidth() / colWidth);
+                    const spanRows = Math.round($b.outerHeight() / rowHeight);
+
+                    return {
+                        // id: $b.attr('id'), // ID tidak terlalu relevan untuk template, karena akan generate baru
+                        colStart: colStart,
+                        rowStart: rowStart,
+                        spanCols: spanCols,
+                        spanRows: spanRows,
+                        zIndex: $b.css('z-index')
+                    };
+                }).get();
+
+                // Ambil map existing dari localStorage
+                const all = JSON.parse(localStorage.getItem('tabloidTemplates') || '{}');
+                // Tambahkan / overwrite
+                all[name] = layouts;
+                // Simpan kembali
+                localStorage.setItem('tabloidTemplates', JSON.stringify(all));
+
+                alert(`Template "${name}" tersimpan di localStorage.`);
+                loadTemplateList(); // refresh daftar di UI jika perlu
+            }
+
+            function selectTemplate() {
+                const name = this.value;
+                if (!name) return;
+
+                if (confirm(
+                        'Memuat template akan menghapus semua layout yang ada di halaman saat ini. Lanjutkan?')) {
+                    $('#canvas').empty();
+                    hideEditorSidebar();
+                } else {
+                    return; // Batalkan pemuatan template
+                }
+
+                // Ambil layout dari localStorage
+                const all = JSON.parse(localStorage.getItem('tabloidTemplates') || '{}');
+                const layouts = all[name] || [];
+
+                layouts.forEach(item => {
+                    const leftPX = item.colStart * colWidth;
+                    const topPX = item.rowStart * rowHeight;
+                    const widthPX = item.spanCols * colWidth;
+                    const heightPX = item.spanRows * rowHeight;
+
+                    const layoutId = 'layout-' + Date.now() + '-' + (++layoutIdCounter); // Generate ID baru
+                    const $box = $('<div class="draggable-layout"></div>')
+                        .attr('id', layoutId)
+                        .css({
+                            position: 'absolute',
+                            top: topPX,
+                            left: leftPX,
+                            width: widthPX,
+                            height: heightPX,
+                            'z-index': item.zIndex
+                        });
+
+                    const $inner = $(
+                        '<div class="inner-layout-box"><div class="content-placeholder">Drop Konten Di Sini</div></div>'
+                    );
+                    $box.append($inner);
+
+
+                    $canvas.append($box);
+
+                    // Reaktifkan draggable & resizable
+                    $box.draggable({
+                        containment: '#canvas',
+                        handle: '.inner-layout-box',
+                        stop(e, ui) {
+                            snapClampCols(ui, $(this));
+                            snapClampRows(ui, $(this));
+                            saveCurrentPage();
+                        }
+                    }).resizable({
+                        handles: 'all',
+                        containment: '#canvas',
+                        minWidth: colWidth,
+                        minHeight: rowHeight,
+                        stop(e, ui) {
+                            snapClampCols(ui, $(this));
+                            snapClampRows(ui, $(this));
+                            saveCurrentPage();
+                        }
+                    });
+
+                    // Re-attach droppable for inner-layout-box
+                    $inner.droppable({
+                        accept: '.content-template',
+                        hoverClass: 'highlight-dropzone',
+                        drop(ev, uii) {
+                            if ($inner.find('.content-text, .content-title, .content-image').length)
+                                return;
+                            $inner.find('.content-placeholder').remove();
+                            const type = uii.helper.data('content-type');
+                            let $newContent;
+                            if (type === 'text') {
+                                $newContent = $(
+                                    '<div class="content-text">Ketik teks Anda di sini...</div>'
+                                );
+                            } else if (type === 'title') {
+                                $newContent = $(
+                                    '<div class="content-title">Judul Tabloid Baru</div>');
+                            } else if (type === 'image') {
+                                $newContent = $(
+                                    '<img class="content-image" src="/image.png" alt="Gambar">');
+                            }
+                            if ($newContent) {
+                                $inner.append($newContent);
+                                attachContentClickHandlers($newContent,
+                                    type); // Panggil fungsi reusable
+                                saveCurrentPage();
+                            }
+                        }
+                    });
+                });
+                saveCurrentPage(); // Simpan setelah memuat template
+            }
+
+            $('#save-template').on('click', saveTemplate);
+            $('#template-select').on('change', selectTemplate);
             $('#save-all').off('click').on('click', saveAllPages);
-            $('#save-layout').on('click', saveCurrentPage);
-            $('#load-layout').on('click', loadLayout);
+            $('#save-layout').on('click', saveCurrentPage); // Menggunakan saveCurrentPage()
+            // $('#load-layout').on('click', loadLayout);
             $('#load-all-page').on('click', loadAllPages);
 
+            $(document).ready(function() {
+                loadTemplateList();
+                // Inisialisasi loadedPagesData dan load halaman pertama saat startup
+                // Periksa apakah ada data proyek yang disimpan
+                const savedProject = localStorage.getItem('savedTabloidProject');
+                if (savedProject) {
+                    loadedPagesData = JSON.parse(savedProject);
+                    const pageKeys = Object.keys(loadedPagesData).sort();
+                    if (pageKeys.length > 0) {
+                        currentPageId = pageKeys[0]; // Muat halaman pertama yang tersimpan
+                        loadPage(currentPageId);
+                    } else {
+                        // Jika tidak ada halaman tersimpan, inisialisasi page1
+                        loadedPagesData["page1"] = [];
+                        loadPage("page1");
+                    }
+                } else {
+                    // Jika tidak ada proyek yang disimpan sama sekali, mulai dengan halaman 1 kosong
+                    loadedPagesData["page1"] = [];
+                    loadPage("page1");
+                }
 
-            let pageCounter = Object.keys(loadedPagesData).length > 0 ? Math.max(...Object.keys(loadedPagesData)
-                .map(p => parseInt(p.replace('page', '')))) + 1 : 1;
+                // Update display saat awal
+                $('#current-page-display').text(`Halaman ${parseInt(currentPageId.replace('page', ''))}`);
+
+                // Inisialisasi pageCounter berdasarkan halaman yang sudah ada
+                pageCounter = Object.keys(loadedPagesData).length > 0 ?
+                    Math.max(...Object.keys(loadedPagesData).map(p => parseInt(p.replace('page', '')))) :
+                    1;
+            });
+
+
+            let pageCounter = 1; // Akan diinisialisasi ulang di $(document).ready
 
             $('#prev-page').on('click', function() {
-                const pageKeys = Object.keys(loadedPagesData).sort();
+                const pageKeys = Object.keys(loadedPagesData).sort((a, b) => {
+                    return parseInt(a.replace('page', '')) - parseInt(b.replace('page', ''));
+                });
                 const currentIndex = pageKeys.indexOf(currentPageId);
                 if (currentIndex > 0) {
                     loadPage(pageKeys[currentIndex - 1]);
@@ -961,7 +934,9 @@
             });
 
             $('#next-page').on('click', function() {
-                const pageKeys = Object.keys(loadedPagesData).sort();
+                const pageKeys = Object.keys(loadedPagesData).sort((a, b) => {
+                    return parseInt(a.replace('page', '')) - parseInt(b.replace('page', ''));
+                });
                 const currentIndex = pageKeys.indexOf(currentPageId);
                 if (currentIndex < pageKeys.length - 1) {
                     loadPage(pageKeys[currentIndex + 1]);
@@ -982,8 +957,6 @@
                 alert(`Halaman baru ${newPageId} ditambahkan!`);
             });
 
-            // Update display saat awal
-            $('#current-page-display').text(`Halaman ${parseInt(currentPageId.replace('page', ''))}`);
         });
     </script>
 </body>
