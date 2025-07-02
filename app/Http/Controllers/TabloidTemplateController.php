@@ -12,47 +12,27 @@ class TabloidTemplateController extends Controller
      */
     public function index()
     {
-        //
+        $template = TabloidTemplate::all();
+
+        return response()->json($template);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function save(Request $request)
     {
-        //
-    }
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'data' => 'required|json',
+        ]);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        if (is_string($validated['data'])) {
+            $validated['data'] = json_decode($validated['data'], true);
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(TabloidTemplate $tabloidTemplate)
-    {
-        //
-    }
+        $validated['name'] = strtolower($validated['name']);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(TabloidTemplate $tabloidTemplate)
-    {
-        //
-    }
+        TabloidTemplate::updateOrCreate(['name' => $validated['name']], ['data' => $validated['data']]);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, TabloidTemplate $tabloidTemplate)
-    {
-        //
+        return response()->json('success');
     }
 
     /**

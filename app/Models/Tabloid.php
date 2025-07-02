@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Tabloid extends Model
 {
     use HasFactory;
-    use HasFactory;
+    use SoftDeletes;
 
 
     protected $fillable = [
@@ -31,6 +32,11 @@ class Tabloid extends Model
     {
         // Contoh jika page_number diurutkan
         return $this->hasMany(TabloidPage::class)->orderBy('page_number');
+    }
+
+    public function firstPage()
+    {
+        return $this->hasOne(TabloidPage::class)->orderBy('page_number', 'asc');
     }
 
     // Jika Anda ingin relasi ke exported_documents (PDF)

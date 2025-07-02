@@ -17,7 +17,6 @@
             font-family: Arial, sans-serif;
             margin: 0;
             display: flex;
-            /* Menggunakan flexbox untuk layout editor */
             height: 100vh;
             background-color: #f0f2f5;
         }
@@ -36,7 +35,6 @@
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
             flex-shrink: 0;
-            /* Jangan biarkan sidebar menyusut */
         }
 
         .sidebar h3 {
@@ -77,29 +75,19 @@
 
         .main-content {
             flex-grow: 1;
-            /* Konten utama mengambil sisa ruang */
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: auto;
-            /* Untuk scroll jika canvas lebih besar dari viewport */
             padding: 20px;
         }
 
-        /* Canvas Ukuran Kertas */
         .paper-canvas {
             background-color: white;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             position: relative;
             border: 1px solid #ccc;
             overflow: hidden;
-            /* Penting agar item tidak keluar saat di-drag keluar batas canvas */
-        }
-
-        /* Contoh Ukuran A4 Landscape - (297mm x 210mm @ 96 DPI = 1123px x 794px) */
-        .paper-canvas.a4-landscape {
-            width: 1123px;
-            height: 794px;
         }
 
         .paper-canvas.a4-potrait {
@@ -108,137 +96,94 @@
             height: 1123px;
         }
 
-        /* Tambahkan ukuran kertas lain jika diperlukan */
-
         .tabloid-grid {
             height: 100%;
             width: 100%;
         }
 
-        /* Gaya untuk item Gridstack */
         .grid-stack-item-content {
             background-color: #ecf0f1;
-            /* Warna latar belakang item layout */
             border: 1px solid #bdc3c7;
             border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            /* Penting untuk inner-layout-box */
             box-sizing: border-box;
             color: #333;
             font-size: 0.9em;
             position: relative;
-            /* Untuk positioning child elements */
         }
 
-        /* Gaya untuk inner-layout-box sebagai dropzone konten */
         .inner-layout-box {
             width: 100%;
             height: 100%;
             display: flex;
-            /* Untuk menampung konten */
             flex-direction: column;
-            /* Konten disusun vertikal */
             align-items: center;
-            /* Pusatkan secara horizontal */
             justify-content: center;
-            /* Pusatkan secara vertikal */
             border: 2px dashed rgba(0, 123, 255, 0.4);
-            /* Border default */
             border-radius: 3px;
             box-sizing: border-box;
             background-color: rgba(255, 255, 255, 0.6);
-            /* padding: 10px; */
             overflow-y: auto;
-            /* Scroll jika konten melebihi */
         }
 
         .inner-layout-box.highlight-dropzone {
             border-color: #007bff;
-            /* Warna highlight saat dragover */
             background-color: rgba(0, 123, 255, 0.1);
         }
 
-        /* Gaya untuk konten yang di-drop */
         .content-text,
         .content-image,
         .content-title {
             display: block;
-            /* Pastikan konten teks/judul tampil vertikal */
             width: 100%;
             height: 100%;
             margin: 0;
-            padding: 0;
-            background-color: #fff;
+            padding: 10px;
+            /* Tambahkan padding agar tidak terlalu mepet */
+            background-color: transparent;
+            /* Ubah agar menyatu dengan inner-box */
             border: none;
-            /* Hapus border agar seamless */
-            border-radius: 0;
-            /* Hapus border-radius */
             box-sizing: border-box;
             word-break: break-word;
-            overflow: auto;
-            /* Potong konten jika terlalu besar */
-        }
-
-        .content-text {
-            font-size: 0.9em;
-            color: #555;
+            overflow: hidden;
+            /* Ubah dari auto ke hidden agar lebih rapi */
         }
 
         .content-image {
             max-width: 100%;
-            height: auto;
-            display: block;
-            /* Hapus spasi bawah img */
+            height: 100%;
+            object-fit: cover;
+            /* Agar gambar mengisi box dengan baik */
+            padding: 0;
         }
 
         .content-title {
             font-size: 1.5em;
-            /* Ukuran font lebih besar untuk judul */
             font-weight: bold;
             color: #222;
             text-align: center;
-            /* Tambahkan pengaturan gaya judul jika diperlukan */
         }
 
-        /* Gaya untuk placeholder */
         .content-placeholder {
             color: #888;
             font-style: italic;
             font-size: 0.9em;
             text-align: center;
         }
-
-        /* Terapkan z-index berdasarkan data-layer */
-        .grid-stack-item[data-layer="1"] {
-            z-index: 10;
-        }
-
-        .grid-stack-item[data-layer="2"] {
-            z-index: 20;
-            /* Lebih tinggi, jadi akan di atas */
-        }
-
-        .grid-stack-item[data-layer="3"] {
-            z-index: 30;
-        }
     </style>
 </head>
 
 <body>
-    {{-- <h1>gridstack testing!</h1> --}}
     <div class="editor-container">
         <div class="sidebar">
             <h3>Palet Layout</h3>
             <div class="layout-palette">
-                <div class="layout-template" data-w="12" data-h="4" data-layer="1" draggable="true">Layout Penuh
-                </div>
-                <div class="layout-template" data-w="6" data-h="4" data-layer="1" draggable="true">Layout
-                    Setengah</div>
-                <div class="layout-template" data-w="4" data-h="4" data-layer="2" draggable="true">Layout
-                    Sepertiga</div>
+                <div class="layout-template" data-w="24" data-h="10" draggable="true">Layout Penuh</div>
+                <div class="layout-template" data-w="12" data-h="10" draggable="true">Layout Setengah</div>
+                <div class="layout-template" data-w="8" data-h="10" draggable="true">Layout Sepertiga</div>
             </div>
 
             <h3>Palet Konten</h3>
@@ -248,9 +193,7 @@
                 <div class="content-template" data-content-type="image" draggable="true">Gambar</div>
             </div>
 
-            <a href="/jquery">
-                <h4>Ke jquery draggable</h4>
-            </a>
+            <button id="save-button" class="btn btn-primary w-100 mt-4">Save to Console</button>
 
         </div>
 
@@ -260,7 +203,7 @@
                 </div>
             </div>
         </div>
-        <!-- Sidebar Editor Konten -->
+
         <div class="sidebar editor-sidebar"
             style="width:350px; background:#f8f9fa; color:#222; border-left:1px solid #ddd;">
             <h3 style="color:#222;">Editor Konten</h3>
@@ -269,17 +212,17 @@
         </div>
     </div>
 
-    <!-- CKEditor CDN -->
     <script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
     <script>
         let selectedContentBox = null;
         let selectedType = null;
         let editorInstance = null;
+
         document.addEventListener('DOMContentLoaded', function() {
-            // Hitung minRow agar gridstack mengisi penuh tinggi kertas
-            const paperHeight = 1123; // px, sesuai .paper-canvas.a4-potrait
-            const cellHeight = 20; // px, sesuai cellHeight gridstack
+            const paperHeight = 1123;
+            const cellHeight = 20;
             const minRow = Math.ceil(paperHeight / cellHeight);
+
             const grid = GridStack.init({
                 column: 24,
                 cellHeight: 'auto',
@@ -287,9 +230,41 @@
                 acceptWidgets: true,
                 animate: true,
                 margin: 0,
-                minRow: minRow, // Paksa gridstack agar grid selalu setinggi kertas
-                // disableResize: true,
+                minRow: minRow,
             }, '.tabloid-grid');
+
+            // FUNGSI SAVE BARU
+            function saveGridState() {
+                // 1. Dapatkan data serialisasi dari Gridstack (posisi, ukuran, id)
+                const serializedData = grid.save();
+
+                // 2. Iterasi setiap widget untuk mengambil konten HTML di dalamnya
+                serializedData.forEach(widget => {
+                    if (widget.id) {
+                        const widgetElement = document.getElementById(widget.id);
+                        if (widgetElement) {
+                            const innerBox = widgetElement.querySelector('.inner-layout-box');
+                            if (innerBox) {
+                                // 3. Tambahkan properti baru 'contentHTML' ke objek widget
+                                widget.contentHTML = innerBox.innerHTML;
+                            }
+                        }
+                    }
+                });
+
+                // 4. Tampilkan hasil akhir di console
+                console.log('--- GRID STATE SAVED ---');
+                console.log(serializedData); // Tampilkan sebagai objek yang bisa di-inspeksi
+
+                console.log('--- JSON REPRESENTATION ---');
+                // Tampilkan sebagai string JSON, cocok untuk dikirim ke server
+                console.log(JSON.stringify(serializedData, null, 2));
+            }
+
+            // Tambahkan event listener ke tombol save
+            const saveButton = document.getElementById('save-button');
+            saveButton.addEventListener('click', saveGridState);
+
 
             const layoutTemplates = document.querySelectorAll('.layout-template');
             const gridElement = document.querySelector('.tabloid-grid');
@@ -319,7 +294,6 @@
                     const mouseX = e.clientX - gridRect.left;
                     const mouseY = e.clientY - gridRect.top;
 
-                    // Gunakan API gridstack jika tersedia untuk konversi pixel ke cell
                     let x, y;
                     if (typeof grid.getCellFromPixel === 'function') {
                         const cell = grid.getCellFromPixel({
@@ -355,7 +329,6 @@
                 });
             });
 
-            // Inisialisasi CKEditor
             CKEDITOR.replace('ckeditor-area');
             CKEDITOR.instances['ckeditor-area'].on('change', function() {
                 if (selectedContentBox && (selectedType === 'text' || selectedType === 'title')) {
@@ -366,11 +339,12 @@
 
             grid.on('added', function(event, items) {
                 items.forEach(item => {
-                    const layer = item.el.dataset.layer; // Jika diatur di layout-template
-                    if (layer) {
-                        item.el.style.zIndex = layer *
-                            10; // Contoh: layer 1 -> z-index 10, layer 2 -> z-index 20
+                    // **PERUBAHAN: Beri ID unik agar bisa diidentifikasi saat menyimpan**
+                    if (!item.el.id) {
+                        item.el.id = 'widget-' + Date.now() + Math.random().toString(36).substring(
+                            2, 9);
                     }
+
                     const itemContent = item.el.querySelector('.grid-stack-item-content');
                     if (itemContent) {
                         itemContent.innerHTML = `<div class="inner-layout-box"></div>`;
@@ -391,21 +365,22 @@
                             });
                             innerBox.addEventListener('drop', function(e) {
                                 e.preventDefault();
+                                e
+                                    .stopPropagation(); // Hentikan propagasi agar tidak ditangani grid utama
                                 this.classList.remove('highlight-dropzone');
+
                                 const placeholder = this.querySelector(
                                     '.content-placeholder');
                                 if (placeholder) {
                                     this.removeChild(placeholder);
                                 }
-                                const existingContent = Array.from(this.children).filter(
-                                    child => !child.classList.contains(
-                                        'content-placeholder'));
-                                if (existingContent.length > 0) {
-                                    console.warn(
-                                        'Box layout sudah memiliki konten. Hanya satu konten diizinkan.'
-                                    );
+
+                                if (this.querySelector(
+                                        '.content-text, .content-image, .content-title')) {
+                                    console.warn('Box layout sudah memiliki konten.');
                                     return;
                                 }
+
                                 const contentData = JSON.parse(e.dataTransfer.getData(
                                     'text/plain'));
                                 let contentElement;
@@ -413,7 +388,6 @@
                                     case 'text':
                                         contentElement = document.createElement('div');
                                         contentElement.className = 'content-text';
-                                        // contentElement.contentEditable = true; // Dihapus, edit via CKEditor
                                         contentElement.innerHTML =
                                             'Ketik teks Anda di sini...';
                                         break;
@@ -421,28 +395,24 @@
                                         contentElement = document.createElement('img');
                                         contentElement.className = 'content-image';
                                         contentElement.src =
-                                            '/image.png';
+                                            'https://via.placeholder.com/400x300'; // Placeholder URL
                                         contentElement.alt = 'Gambar';
                                         break;
                                     case 'title':
                                         contentElement = document.createElement('h2');
                                         contentElement.className = 'content-title';
-                                        // contentElement.contentEditable = true; // Dihapus, edit via CKEditor
                                         contentElement.innerHTML = 'Judul Tabloid Baru';
                                         break;
                                     default:
-                                        console.warn('Tipe konten tidak dikenal:',
-                                            contentData.type);
                                         return;
                                 }
                                 if (contentElement) {
                                     this.appendChild(contentElement);
-                                    // Tambahkan event click untuk memilih box ke editor
                                     if (contentData.type === 'text' || contentData.type ===
                                         'title') {
                                         contentElement.addEventListener('click', function(
-                                            e) {
-                                            e.stopPropagation();
+                                            ev) {
+                                            ev.stopPropagation();
                                             selectedContentBox = this;
                                             selectedType = contentData.type;
                                             editorInstance.setData(this.innerHTML);
@@ -454,7 +424,6 @@
                                     }
                                 }
                             });
-                            // Tambahkan placeholder awal agar dropzone terlihat kosong
                             const placeholder = document.createElement('div');
                             placeholder.className = 'content-placeholder';
                             placeholder.innerText = 'Drop Konten Di Sini';
@@ -463,7 +432,7 @@
                     }
                 });
             });
-            // Event delegation untuk box yang sudah ada (jika reload)
+
             document.addEventListener('click', function(e) {
                 if (e.target.classList.contains('content-text') || e.target.classList.contains(
                         'content-title')) {

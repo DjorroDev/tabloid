@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $tabloid->title }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
+    </script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <style>
         body {
@@ -185,6 +189,11 @@
             font-size: 0.9em;
             text-align: center;
         }
+
+        .cke_warning,
+        .cke_notifications_area {
+            display: none !important;
+        }
     </style>
 </head>
 
@@ -193,9 +202,9 @@
         <div class="sidebar">
             <h3>Palet Layout</h3>
             <div class="layout-palette">
-                <div class="layout-template" data-w="300" data-h="120">Layout Penuh</div>
-                <div class="layout-template" data-w="150" data-h="120">Layout Setengah</div>
-                <div class="layout-template" data-w="100" data-h="120">Layout Sepertiga</div>
+                <div class="layout-template" data-w="100" data-h="120">Layout Baru</div>
+                {{-- <div class="layout-template" data-w="150" data-h="120">Layout Setengah</div> --}}
+                {{-- <div class="layout-template" data-w="100" data-h="120">Layout Sepertiga</div> --}}
             </div>
             <h3>Palet Konten</h3>
             <div class="content-palette">
@@ -203,23 +212,24 @@
                 <div class="content-template" data-content-type="text">Teks</div>
                 <div class="content-template" data-content-type="image">Gambar</div>
             </div>
-            <button id="save-layout" class="btn btn-primary mt-3">Simpan Layout</button>
-            <button id="save-all" class="btn btn-primary mt-3">Simpan semua halaman</button>
+            {{-- <button id="save-layout" class="btn btn-primary mt-3">Simpan Layout</button> --}}
+            <button id="save-all" class="btn btn-primary mb-2">Simpan semua halaman</button>
             {{-- <button id="load-layout" class="btn btn-info mt-2">Muat Layout</button>
             <button id="load-all-page" class="btn btn-info mt-2">Muat semua halaman</button> --}}
-            <br>
-            <h3>Navigasi Halaman</h3>
+            <h3>Navigasi</h3>
             <div class="page-navigation">
-                <button id="prev-page" class="btn btn-secondary btn-sm me-2">‹ Sebelumnya</button>
-                <span id="current-page-display" class="fw-bold">Halaman 1</span>
-                <button id="next-page" class="btn btn-secondary btn-sm ms-2">Berikutnya ›</button>
-                <button id="add-page" class="btn btn-primary btn-sm mt-2 w-100">Tambah Halaman Baru</button>
+                <div class="input-group mb-2">
+                    <button id="prev-page" class="btn btn-secondary btn-sm">‹</button>
+                    <select id="page-select" class="form-select form-select-sm mx-2" style="max-width:110px;"></select>
+                    <button id="next-page" class="btn btn-secondary btn-sm">›</button>
+                </div>
+                <button id="add-page" class="btn btn-primary btn-sm w-100 mb-2">Tambah Halaman Baru</button>
             </div>
             <h3>Template</h3>
             <div class="template">
-                <select id="template-select"></select>
-                <input value="" placeholder="Nama template" id="template-name" type="text" />
-                <button id="save-template" class="btn btn-primary">Simpan sebagai template</button>
+                <select id="template-select" class="form-select form-select-sm mb-2"></select>
+                <button id="open-modal-simpan-template" class="btn btn-primary mb-2">Simpan sebagai template</button>
+                {{-- <button id="open-modal-pilih-template" class="btn btn-info btn-sm w-100 mb-2">Pilih Template</button> --}}
             </div>
             {{-- <a href="/">Ke Gridstack</a> --}}
         </div>
@@ -236,6 +246,28 @@
             <div id="editor-info" style="font-size:0.9em; color:#888; margin-top:10px;"></div>
         </div>
     </div>
+
+    <!-- Modal Save as Template -->
+    <div class="modal fade" id="modalSimpanTemplate" tabindex="-1" aria-labelledby="modalSimpanTemplateLabel"
+        aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered">
+            <form id="form-save-template" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalSimpanTemplateLabel">Simpan Halaman Sebagai Template</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="input-template-name" class="form-control" placeholder="Nama Template"
+                        required>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
@@ -373,8 +405,9 @@
             const colWidth = canvasW / COLS;
             const rowHeight = canvasH / ROWS;
 
-            let currentPageId = "page1"; // Variabel untuk melacak halaman yang sedang aktif
-            let loadedPagesData = {}; // Objek untuk menyimpan semua data halaman yang
+            let currentPageId = 1;
+            let loadedPagesData = {};
+            let loadedTemplates = [];
 
             // unique id
             let layoutIdCounter = 0; // Inisialisasi counter
@@ -606,8 +639,7 @@
             }
 
             function saveAllPages() {
-                saveCurrentPage(); // Pastikan halaman saat ini sudah tersimpan di loadedPagesData
-                // localStorage.setItem('savedTabloidProject', JSON.stringify(loadedPagesData));
+                saveCurrentPage();
                 $.ajax({
                     url: '/tabloids/{{ $tabloid->id }}/editor',
                     data: {
@@ -617,11 +649,9 @@
                     type: 'post',
                     beforeSend: function() {
                         loading = true;
-                        // $('#' + _render_content_active).html('Loading...');
                     },
                     success: function(response) {
                         console.log(response)
-                        // $('#' + _render_content_active).html(response);
                     },
                     error: function(xhr) {
                         loading = false;
@@ -744,79 +774,34 @@
                 hideEditorSidebar(); // Sembunyikan sidebar editor saat berpindah halaman
             }
 
-            // 4. Fungsi `loadAllPages()` (dipanggil saat startup)
-            function loadAllPages() {
-                const savedData = localStorage.getItem('savedTabloidProject');
-                if (savedData) {
-                    loadedPagesData = JSON.parse(savedData);
-                    // Tentukan halaman pertama yang akan dimuat, default ke 'page1' atau yang terakhir diedit
-                    const initialPageId = Object.keys(loadedPagesData)[0] || "page1";
-                    loadPage(initialPageId);
-                } else {
-                    loadedPagesData["page1"] = []; // Inisialisasi halaman 1 jika tidak ada data
-                    loadPage("page1");
-                }
-            }
-
             function loadTemplateList() {
-                const all = JSON.parse(localStorage.getItem('tabloidTemplates') || '{}');
-                const $sel = $('#template-select').empty();
-                $sel.append('<option value="">-- Pilih Template --</option>');
-                Object.keys(all).forEach(name => {
-                    $sel.append(`<option value="${name}">${name}</option>`);
-                });
-            }
-
-            function saveTemplate() {
-                const name = $('#template-name').val().trim();
-                if (!name) return alert('Masukkan nama template.');
-
-                // Ambil layout current
-                const layouts = $('.draggable-layout').map(function() {
-                    const $b = $(this);
-                    const position = $b.position();
-
-                    const colStart = Math.round(position.left / colWidth);
-                    const rowStart = Math.round(position.top / rowHeight);
-                    const spanCols = Math.round($b.outerWidth() / colWidth);
-                    const spanRows = Math.round($b.outerHeight() / rowHeight);
-
-                    return {
-                        // id: $b.attr('id'), // ID tidak terlalu relevan untuk template, karena akan generate baru
-                        colStart: colStart,
-                        rowStart: rowStart,
-                        spanCols: spanCols,
-                        spanRows: spanRows,
-                        zIndex: $b.css('z-index')
-                    };
-                }).get();
-
-                // Ambil map existing dari localStorage
-                const all = JSON.parse(localStorage.getItem('tabloidTemplates') || '{}');
-                // Tambahkan / overwrite
-                all[name] = layouts;
-                // Simpan kembali
-                localStorage.setItem('tabloidTemplates', JSON.stringify(all));
-
-                alert(`Template "${name}" tersimpan di localStorage.`);
-                loadTemplateList(); // refresh daftar di UI jika perlu
+                $.get('/tabloids/template', function(data) {
+                    loadedTemplates = data;
+                    const $sel = $('#template-select').empty();
+                    $sel.append('<option value="">-- Pilih Template --</option>');
+                    data.forEach(tpl => {
+                        $sel.append(`<option value="${tpl.name}">${tpl.name}</option>`);
+                    });
+                })
             }
 
             function selectTemplate() {
                 const name = this.value;
                 if (!name) return;
 
-                if (confirm(
+                if (!loadedTemplates) return alert('Template belum dimuat!');
+                const tpl = loadedTemplates.find(t => t.name === name);
+                if (!tpl) return alert('Template tidak ditemukan!');
+
+                if (!confirm(
                         'Memuat template akan menghapus semua layout yang ada di halaman saat ini. Lanjutkan?')) {
-                    $('#canvas').empty();
-                    hideEditorSidebar();
-                } else {
-                    return; // Batalkan pemuatan template
+                    return;
                 }
 
-                // Ambil layout dari localStorage
-                const all = JSON.parse(localStorage.getItem('tabloidTemplates') || '{}');
-                const layouts = all[name] || [];
+                $('#canvas').empty();
+                hideEditorSidebar();
+
+                const layouts = tpl.data || [];
 
                 layouts.forEach(item => {
                     const leftPX = item.colStart * colWidth;
@@ -898,15 +883,13 @@
                 saveCurrentPage(); // Simpan setelah memuat template
             }
 
-            $('#save-template').on('click', saveTemplate);
             $('#template-select').on('change', selectTemplate);
             $('#save-all').off('click').on('click', saveAllPages);
             $('#save-layout').on('click', saveCurrentPage); // Menggunakan saveCurrentPage()
             // $('#load-layout').on('click', loadLayout);
-            $('#load-all-page').on('click', loadAllPages);
+            // $('#load-all-page').on('click', loadAllPages);
 
             $(document).ready(function() {
-                let savedProject = null;
                 $.ajax({
                     url: '/tabloids/{{ $tabloid->id }}/get-pages',
                     success: function(response) {
@@ -917,81 +900,174 @@
                             loadedPagesData = {};
                             arr.forEach(pageObj => {
                                 if (pageObj.page_number) {
-                                    loadedPagesData['page' + pageObj.page_number] =
+                                    loadedPagesData[parseInt(pageObj.page_number)] =
                                         pageObj.data || [];
                                 }
                             });
-                            const pageKeys = Object.keys(loadedPagesData).sort();
+                            const pageKeys = Object.keys(loadedPagesData).map(Number).sort((a,
+                                b) => a - b);
                             if (pageKeys.length > 0) {
                                 currentPageId = pageKeys[0];
                                 loadPage(currentPageId);
                             } else {
-                                loadedPagesData["page1"] = [];
-                                loadPage("page1");
+                                loadedPagesData[1] = [];
+                                loadPage(1);
                             }
+                            // Inisialisasi pageCounter di sini!
+                            pageCounter = pageKeys.length > 0 ? Math.max(...pageKeys) : 1;
                         } else {
-                            loadedPagesData["page1"] = [];
-                            loadPage("page1");
+                            loadedPagesData[1] = [];
+                            loadPage(1);
+                            pageCounter = 1;
                         }
+                        loadTemplateList();
+                        $('#current-page-display').text(` ${currentPageId}`);
+                        afterPageChange();
                     }
-
                 })
-                loadTemplateList();
-                // Inisialisasi loadedPagesData dan load halaman pertama saat startup
-                // Periksa apakah ada data proyek yang disimpan
-                // const savedProject = localStorage.getItem('savedTabloidProject');
-
-
                 // Update display saat awal
-                $('#current-page-display').text(`Halaman ${parseInt(currentPageId.replace('page', ''))}`);
-
+                $('#current-page-display').text(`${currentPageId}`);
                 // Inisialisasi pageCounter berdasarkan halaman yang sudah ada
                 pageCounter = Object.keys(loadedPagesData).length > 0 ?
-                    Math.max(...Object.keys(loadedPagesData).map(p => parseInt(p.replace('page', '')))) :
+                    Math.max(...Object.keys(loadedPagesData).map(Number)) :
                     1;
+                afterPageChange();
             });
 
 
             let pageCounter = 1; // Akan diinisialisasi ulang di $(document).ready
 
             $('#prev-page').on('click', function() {
-                const pageKeys = Object.keys(loadedPagesData).sort((a, b) => {
-                    return parseInt(a.replace('page', '')) - parseInt(b.replace('page', ''));
-                });
+                const pageKeys = Object.keys(loadedPagesData).map(Number).sort((a, b) => a - b);
                 const currentIndex = pageKeys.indexOf(currentPageId);
                 if (currentIndex > 0) {
                     loadPage(pageKeys[currentIndex - 1]);
-                    $('#current-page-display').text(
-                        `Halaman ${parseInt(pageKeys[currentIndex - 1].replace('page', ''))}`);
+                    currentPageId = pageKeys[currentIndex - 1];
+                    afterPageChange();
                 } else {
                     alert('Ini adalah halaman pertama.');
                 }
             });
 
             $('#next-page').on('click', function() {
-                const pageKeys = Object.keys(loadedPagesData).sort((a, b) => {
-                    return parseInt(a.replace('page', '')) - parseInt(b.replace('page', ''));
-                });
+                const pageKeys = Object.keys(loadedPagesData).map(Number).sort((a, b) => a - b);
                 const currentIndex = pageKeys.indexOf(currentPageId);
                 if (currentIndex < pageKeys.length - 1) {
                     loadPage(pageKeys[currentIndex + 1]);
-                    $('#current-page-display').text(
-                        `Halaman ${parseInt(pageKeys[currentIndex + 1].replace('page', ''))}`);
+                    currentPageId = pageKeys[currentIndex + 1];
+                    afterPageChange();
                 } else {
                     alert('Ini adalah halaman terakhir.');
                 }
             });
+            // Panggil updatePageSelect setiap kali halaman bertambah/berpindah
+            function afterPageChange() {
+                updatePageSelect();
+                // $('#current-page-display').text(`Halaman ${parseInt(currentPageId.replace('page', ''))}`);
+            }
 
-            $('#add-page').on('click', function() {
-                saveCurrentPage(); // Simpan halaman aktif sebelum membuat yang baru
-                pageCounter++;
-                const newPageId = `page${pageCounter}`;
-                loadedPagesData[newPageId] = []; // Inisialisasi halaman baru kosong
-                loadPage(newPageId);
-                $('#current-page-display').text(`Halaman ${pageCounter}`);
-                alert(`Halaman baru ${newPageId} ditambahkan!`);
+            // Update pada load awal
+            $(document).ready(function() {
+                // ...existing code...
+                afterPageChange();
             });
 
+            $('#prev-page').on('click', function() {
+                // ...existing code...
+                afterPageChange();
+            });
+            $('#next-page').on('click', function() {
+                // ...existing code...
+                afterPageChange();
+            });
+            $('#add-page').on('click', function() {
+                // ...existing code...
+                afterPageChange();
+            });
+
+
+            $('#add-page').on('click', function() {
+                saveCurrentPage();
+                pageCounter++;
+                const newPageId = pageCounter;
+                loadedPagesData[newPageId] = [];
+                loadPage(newPageId);
+                currentPageId = newPageId;
+                $('#current-page-display').text(`${newPageId}`);
+                alert(`Halaman baru ${newPageId} ditambahkan!`);
+                afterPageChange();
+            });
+
+            function updatePageSelect() {
+                const $select = $('#page-select');
+                $select.empty();
+                const pageKeys = Object.keys(loadedPagesData).map(Number).sort((a, b) => a - b);
+                pageKeys.forEach((key, idx) => {
+                    $select.append(
+                        `<option value="${key}" ${key == currentPageId ? 'selected' : ''}>${key}</option>`
+                    );
+                });
+            }
+
+            $('#page-select').on('change', function() {
+                const pageId = parseInt($(this).val());
+                if (pageId && loadedPagesData[pageId]) {
+                    loadPage(pageId);
+                    currentPageId = pageId;
+                    afterPageChange();
+                }
+            });
+
+            // Tampilkan modal simpan template
+            $('#open-modal-simpan-template').on('click', function() {
+                $('#input-template-name').val('');
+                const modal = new bootstrap.Modal(document.getElementById('modalSimpanTemplate'));
+                modal.show();
+            });
+
+            // Simpan template dari halaman aktif
+            $('#form-save-template').on('submit', function(e) {
+                e.preventDefault();
+                const name = $('#input-template-name').val().trim();
+                if (!name) return alert('Masukkan nama template.');
+                // Ambil layout current
+                const layouts = $('.draggable-layout').map(function() {
+                    const $b = $(this);
+                    const position = $b.position();
+
+                    const colStart = Math.round(position.left / colWidth);
+                    const rowStart = Math.round(position.top / rowHeight);
+                    const spanCols = Math.round($b.outerWidth() / colWidth);
+                    const spanRows = Math.round($b.outerHeight() / rowHeight);
+
+                    return {
+                        colStart: colStart,
+                        rowStart: rowStart,
+                        spanCols: spanCols,
+                        spanRows: spanRows,
+                        zIndex: $b.css('z-index')
+                    };
+                }).get();
+
+                $.ajax({
+                    url: '/tabloids/template/save',
+                    method: 'POST',
+                    data: {
+                        name: name,
+                        data: JSON.stringify(layouts),
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(res) {
+                        alert(`Template "${name}" tersimpan!`);
+                        bootstrap.Modal.getInstance(document.getElementById(
+                            'modalSimpanTemplate')).hide();
+                        loadTemplateList();
+                    },
+                    error: function(xhr) {
+                        alert('Gagal menyimpan template!');
+                    }
+                });
+            });
         });
     </script>
 </body>

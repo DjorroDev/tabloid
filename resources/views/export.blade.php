@@ -4,9 +4,8 @@
 <head>
     <title>{{ $tabloid->title }}</title>
     <style>
-        /* Tambahkan CSS yang relevan untuk rendering PDF di sini */
         body {
-            /* font-family: sans-serif; */
+            font-family: sans-serif;
             margin: 0;
             padding: 0;
         }
@@ -15,8 +14,8 @@
             width: 210mm;
             height: 297mm;
             position: relative;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
+            /* border: 1px solid #ccc;
+            box-sizing: border-box; */
         }
 
         .draggable-layout {

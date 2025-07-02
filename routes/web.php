@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\TabloidController;
-use App\Models\Tabloid;
+use App\Http\Controllers\TabloidTemplateController;
+use App\Models\TabloidTemplate;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,4 +31,9 @@ Route::get('/tabloids/{tabloid}/editor', [TabloidController::class, 'edit'])->na
 Route::post('/tabloids/{tabloid}/editor', [TabloidController::class, 'update'])->name('tabloid.update');
 Route::get('/tabloids/{tabloid}/get-pages', [TabloidController::class, 'getAllPages'])->name('tabloid.getpages');
 Route::get('/tabloids/{id}/export', [TabloidController::class, 'exportToPDF'])->name('tabloid.export');
-// Route::get
+Route::put('/tabloids/{tabloid}/update-title', [TabloidController::class, 'updateTitle'])->name('tabloid.updatetitle');
+Route::delete('/tabloids/{tabloid}/delete', [TabloidController::class, 'destroy'])->name('tabloid.destroy');
+
+
+Route::get('/tabloids/template', [TabloidTemplateController::class, 'index'])->name('tabloid.template.index');
+Route::post('/tabloids/template/save', [TabloidTemplateController::class, 'save'])->name('tabloid.template.save');

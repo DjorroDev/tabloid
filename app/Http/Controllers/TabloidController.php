@@ -7,6 +7,7 @@ use App\Models\TabloidPage;
 use Breuer\MakePDF\Enums\Format;
 use Breuer\MakePDF\Facades\PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TabloidController extends Controller
 {
@@ -15,7 +16,7 @@ class TabloidController extends Controller
      */
     public function index()
     {
-        $tabloid = Tabloid::all();
+        $tabloid = Tabloid::with('firstPage')->orderByDesc('created_at')->get();
         return view('index', ['tabloids' => $tabloid]);
         // return response()->json($tabloid);
     }
@@ -49,6 +50,21 @@ class TabloidController extends Controller
     public function edit(Tabloid $tabloid)
     {
         return view('editor', ['tabloid' => $tabloid]);
+    }
+
+    public function updateTitle(Tabloid $tabloid, Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+        ]);
+        try {
+            $tabloid->title = $request->input('title');
+            $tabloid->save();
+
+            return response()->json(['error' => false, 'message' => 'Judul berhasil diperbarui.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => true, 'message' => 'Gagal memperbarui judul'], 500);
+        }
     }
 
     public function exportToPDF(Tabloid $tabloid, $id)
@@ -103,6 +119,16 @@ class TabloidController extends Controller
      */
     public function destroy(Tabloid $tabloid)
     {
-        //
+        DB::beginTransaction();
+        try {
+            $tabloid->pages()->delete();
+            $tabloid->delete();
+
+            DB::commit();
+
+            return response()->json(['error' => false, 'message' => 'Berhasil Menghapus Tabloid']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => true, 'message' => 'Terjadi kesalahan']);
+        }
     }
 }
