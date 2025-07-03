@@ -9,9 +9,9 @@
 
         /* Paksa font-size kecil untuk semua isi preview tabloid */
         /* .tabloid-preview .content-text * {
-                                font-size: 12px !important;
-                                line-height: 1.1 !important;
-                            } */
+                                                        font-size: 12px !important;
+                                                        line-height: 1.1 !important;
+                                                    } */
     </style>
     <div class="card">
         <h5 class="card-header">List Tabloid</h5>
@@ -86,8 +86,10 @@
                                 </div>
                                 <p class="card-text text-muted mb-2" style="font-size: 0.9rem;">
                                     {{ Str::limit($tabloid->description, 60) }}</p>
+                                <a href="{{ route('tabloid.export', $tabloid->id) }}"
+                                    class="btn btn-sm btn-primary mt-auto mb-2">Preview</a>
                                 <a href="{{ route('tabloid.edit', $tabloid->id) }}"
-                                    class="btn btn-sm btn-primary mt-auto">Lihat Detail</a>
+                                    class="btn btn-sm btn-primary mt-auto">Buka Editor</a>
                                 <a href="javascript:void(0);" onclick="_delete_data(this)" data-id="{{ $tabloid->id }}"
                                     data-uri="{{ route('tabloid.destroy', [$tabloid->id]) }}"
                                     class="btn btn-sm btn-danger mt-2">Delete <i class="bx bx-trash me-1"></i></a>
