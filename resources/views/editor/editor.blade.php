@@ -1,201 +1,7 @@
 <!doctype html>
 <html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $tabloid->title }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous">
-    </script>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            display: flex;
-            height: 100vh;
-            background-color: #f0f2f5;
-        }
-
-        .editor-container {
-            display: flex;
-            width: 100%;
-            height: 100%;
-        }
-
-        .sidebar {
-            width: 250px;
-            background-color: #34495e;
-            color: white;
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
-            flex-shrink: 0;
-        }
-
-        .sidebar h3 {
-            margin-top: 0;
-            color: #ecf0f1;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-
-        .layout-palette,
-        .content-palette {
-            margin-bottom: 30px;
-        }
-
-        .layout-template,
-        .content-template {
-            background-color: #2c3e50;
-            color: white;
-            padding: 10px 15px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-            cursor: grab;
-            transition: background-color 0.2s ease;
-            text-align: center;
-            border: 1px dashed #7f8c8d;
-        }
-
-        .layout-template:hover,
-        .content-template:hover {
-            background-color: #3a536b;
-        }
-
-        .layout-template:active,
-        .content-template:active {
-            cursor: grabbing;
-        }
-
-        .main-content {
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: auto;
-            padding: 20px;
-        }
-
-        .paper-canvas {
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            position: relative;
-            /* penting */
-            border: 1px solid #ccc;
-            overflow: hidden;
-            /* Tambahkan agar tidak pernah mengecil/membesar */
-            /* width: 210mm;
-            height: 297mm;
-            min-width: 210mm;
-            min-height: 297mm;
-            max-width: 210mm;
-            max-height: 297mm; */
-        }
-
-        .paper-canvas.a4-landscape {
-            width: 297mm;
-            height: 210mm;
-            min-width: 297mm;
-            min-height: 210mm;
-            max-width: 297mm;
-            max-height: 210mm;
-        }
-
-        .paper-canvas.a4-portrait {
-            margin-top: 200px;
-            width: 210mm;
-            height: 297mm;
-            min-width: 210mm;
-            min-height: 297mm;
-            /* max-width: 210mm;
-            max-height: 297mm; */
-        }
-
-        .draggable-layout {
-            position: absolute;
-            /* penting agar .css(top,left) berfungsi */
-        }
-
-        .grid-stack-item-content {
-            background-color: #ecf0f1;
-            border: 1px solid #bdc3c7;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            box-sizing: border-box;
-            color: #333;
-            font-size: 0.9em;
-            position: relative;
-        }
-
-        .inner-layout-box {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 2px dashed rgba(0, 123, 255, 0.4);
-            border-radius: 3px;
-            box-sizing: border-box;
-            background-color: rgba(255, 255, 255, 0.6);
-            /* padding: 10px; */
-            overflow-y: auto;
-        }
-
-        .inner-layout-box.highlight-dropzone {
-            border-color: #007bff;
-            background-color: rgba(0, 123, 255, 0.1);
-        }
-
-        .content-text,
-        .content-image {
-            display: block;
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            background-color: #fff;
-            border: none;
-            border-radius: 0;
-            box-sizing: border-box;
-            word-break: break-word;
-            overflow: auto;
-        }
-
-        .content-text {
-            overflow: hidden;
-            font-size: 0.9em;
-            color: #555;
-        }
-
-        .content-image {
-            width: 100%;
-            height: 100%;
-            display: block;
-            object-fit: fill;
-        }
-
-        .content-placeholder {
-            color: #888;
-            font-style: italic;
-            font-size: 0.9em;
-            text-align: center;
-        }
-
-        .cke_warning,
-        .cke_notifications_area {
-            display: none !important;
-        }
-    </style>
-</head>
+@include('editor._head', ['tabloid' => $tabloid ?? null])
 
 <body>
     <div class="editor-container">
@@ -208,14 +14,11 @@
             </div>
             <h3>Palet Konten</h3>
             <div class="content-palette">
-                {{-- <div class="content-template" data-content-type="title">Judul</div> --}}
                 <div class="content-template" data-content-type="text">Teks</div>
-                <div class="content-template" data-content-type="image">Gambar</div>
+                <button id="open-modal-gambar" class="btn btn-primary w-100 mb-2">Gallery</button>
+
             </div>
-            {{-- <button id="save-layout" class="btn btn-primary mt-3">Simpan Layout</button> --}}
             <button id="save-all" class="btn btn-primary mb-2">Simpan semua halaman</button>
-            {{-- <button id="load-layout" class="btn btn-info mt-2">Muat Layout</button>
-            <button id="load-all-page" class="btn btn-info mt-2">Muat semua halaman</button> --}}
             <h3>Navigasi</h3>
             <div class="page-navigation">
                 <div class="input-group mb-2">
@@ -230,6 +33,10 @@
                 <select id="template-select" class="form-select form-select-sm mb-2"></select>
                 <button id="open-modal-simpan-template" class="btn btn-primary mb-2">Simpan sebagai template</button>
                 {{-- <button id="open-modal-pilih-template" class="btn btn-info btn-sm w-100 mb-2">Pilih Template</button> --}}
+            </div>
+            <h3>Import Data</h3>
+            <div class="import-data">
+                <button id="open-modal-import-data" class="btn btn-info w-100 mb-2">Import Data</button>
             </div>
             {{-- <a href="/">Ke Gridstack</a> --}}
         </div>
@@ -247,27 +54,7 @@
         </div>
     </div>
 
-    <!-- Modal Save as Template -->
-    <div class="modal fade" id="modalSimpanTemplate" tabindex="-1" aria-labelledby="modalSimpanTemplateLabel"
-        aria-hidden="true">
-        <div class="modal-dialog  modal-dialog-centered">
-            <form id="form-save-template" class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalSimpanTemplateLabel">Simpan Halaman Sebagai Template</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="text" id="input-template-name" class="form-control" placeholder="Nama Template"
-                        required>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
+    @include('editor._modal')
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
@@ -275,7 +62,38 @@
     <script>
         $(function() {
             // Inisialisasi CKEditor
-            CKEDITOR.replace('ckeditor-area');
+            CKEDITOR.replace('ckeditor-area', {
+                toolbar: [{
+                        name: 'basicstyles',
+                        groups: ['basicstyles', 'cleanup'],
+                        items: ['Bold', 'Italic', 'Underline', 'Strike']
+                    },
+                    {
+                        name: 'paragraph',
+                        groups: ['list', 'blocks', 'align'],
+                        items: ['NumberedList', 'BulletedList', '-', 'Blockquote', '-', 'JustifyLeft',
+                            'JustifyCenter', 'JustifyRight', 'JustifyBlock'
+                        ]
+                    },
+                    {
+                        name: 'links',
+                        items: ['Link', 'Unlink']
+                    },
+                    {
+                        name: 'insert',
+                        items: ['Image', 'Iframe']
+                    },
+                    '/',
+                    {
+                        name: 'styles',
+                        items: ['Styles', 'Format', 'Font', 'FontSize']
+                    },
+                    {
+                        name: 'colors',
+                        items: ['TextColor', 'BGColor']
+                    },
+                ]
+            });
             const editor = CKEDITOR.instances['ckeditor-area'];
             let selectedBox = null,
                 selectedType = null;
@@ -298,14 +116,13 @@
             // Fungsi reusable untuk melampirkan event handler klik ke elemen konten
             function attachContentClickHandlers($contentElement, type) {
                 $contentElement.on('click', e => {
-                    e
-                        .stopPropagation(); // Hentikan propagasi agar tidak memicu handler layout atau document
+                    e.stopPropagation();
                     selectedBox = $contentElement;
                     selectedType = type;
                     showEditorSidebar();
 
                     if (type === 'text' || type === 'title') {
-                        $('#ckeditor-area').show();
+                        $('#cke_ckeditor-area').show();
                         editor.setData($contentElement.html());
                         $('#editor-info').text(`Mengedit: ${selectedType.toUpperCase()}`);
                         $('#editor-action').html(`
@@ -313,18 +130,39 @@
                             <button id="delete-content" class="btn btn-warning btn-sm mb-2 ms-2">Hapus Konten</button>
                         `);
                     } else if (type === 'image') {
-                        $('#ckeditor-area').hide(); // CKEditor tidak untuk gambar
+                        $('#cke_ckeditor-area').hide(); // CKEditor tidak untuk gambar
                         $('#editor-info').text(
-                            `Mengedit: ${selectedType.toUpperCase()} (Klik untuk ganti URL gambar)`);
+                            `Mengedit: ${selectedType.toUpperCase()} (Klik Gallery untuk pilih/upload gambar)`
+                        );
+                        const currentFit = $contentElement.css('object-fit') || 'contain';
                         $('#editor-action').html(`
-                            <button id="delete-layout" class="btn btn-danger btn-sm mb-2">Hapus Layout</button>
-                            <button id="delete-content" class="btn btn-warning btn-sm mb-2 ms-2">Hapus Konten</button>
-                            <input type="text" id="image-url-input" class="form-control mt-2" placeholder="URL Gambar Baru" value="${selectedBox.attr('src')}">
-                            <button id="update-image-url" class="btn btn-success btn-sm mt-2">Perbarui Gambar</button>
+                            <div>
+                                <button id="delete-layout" class="btn btn-danger btn-sm mb-2">Hapus Layout</button>
+                                <button id="delete-content" class="btn btn-warning btn-sm mb-2 ms-2">Hapus Konten</button>
+                            </div>
+                            <button id="open-modal-gambar" class="btn btn-primary">Ganti gambar</button>
+                            <div class="mt-2">
+                                <label for="object-fit-select" class="form-label mb-1">Image Style</label>
+                                <select id="object-fit-select" class="form-select form-select-sm">
+                                    <option value="fill" ${currentFit === 'fill' ? 'selected' : ''}>Fill</option>
+                                    <option value="contain" ${currentFit === 'contain' ? 'selected' : ''}>Contain</option>
+                                    <option value="cover" ${currentFit === 'cover' ? 'selected' : ''}>Cover</option>
+                                    <option value="none" ${currentFit === 'none' ? 'selected' : ''}>None</option>
+                                    <option value="scale-down" ${currentFit === 'scale-down' ? 'selected' : ''}>Scale Down</option>
+                                </select>
+                            </div>
                         `);
                     }
                 });
             }
+
+            $(document).on('change', '#object-fit-select', function() {
+                if (selectedBox && selectedType === 'image') {
+                    const fit = $(this).val();
+                    selectedBox.css('object-fit', fit);
+                    saveCurrentPage();
+                }
+            });
 
             // Hapus semua handler klik sebelumnya pada .draggable-layout yang umum
             // dan ganti dengan pendekatan yang lebih spesifik
@@ -344,22 +182,6 @@
                 $('#editor-action').html(
                     '<button id="delete-layout" class="btn btn-danger btn-sm mb-2">Hapus Layout</button>'
                 );
-            });
-
-
-            // Handler untuk update URL gambar
-            $(document).on('click', '#update-image-url', function() {
-                if (selectedBox && selectedType === 'image') {
-                    const newUrl = $('#image-url-input').val();
-                    if (newUrl) {
-                        selectedBox.attr('src', newUrl);
-                        selectedBox.attr('alt', 'Gambar dari URL baru');
-                        saveCurrentPage();
-                        alert('URL Gambar diperbarui!');
-                    } else {
-                        alert('Masukkan URL gambar yang valid.');
-                    }
-                }
             });
 
             // Hapus layout
@@ -391,11 +213,11 @@
             });
 
             // Sembunyikan editor jika klik di luar layout/konten/editor
-            $(document).on('click', function(e) {
-                if (!$(e.target).closest('.draggable-layout, #editor-sidebar').length) {
-                    hideEditorSidebar();
-                }
-            });
+            // $(document).on('click', function(e) {
+            //     if (!$(e.target).closest('.draggable-layout, #editor-sidebar').length) {
+            //         hideEditorSidebar();
+            //     }
+            // });
 
             const COLS = 36;
             const ROWS = 40;
@@ -620,6 +442,7 @@
                         } else if (contentType === 'image') {
                             content.src = $contentElement.attr('src');
                             content.alt = $contentElement.attr('alt');
+                            content.objectFit = $contentElement.css('object-fit') || 'contain';
                         }
                     }
 
@@ -707,7 +530,9 @@
                                 '">' + item.content.html + '</div>');
                         } else if (item.content.type === 'image') {
                             $content = $('<img class="content-image" src="' + item.content.src + '" alt="' +
-                                item.content.alt + '" data-content-id="image-' + Date.now() + '">');
+                                item.content.alt + '" data-content-id="image-' + Date.now() +
+                                '" style="object-fit:' + (item.content.objectFit ? item.content
+                                    .objectFit : 'contain') + ';">');
                         }
                         $inner.append($content);
 
@@ -754,12 +579,6 @@
                                 $newContent = $(
                                     '<div class="content-text">Ketik teks Anda di sini...</div>'
                                 );
-                            } else if (type === 'title') {
-                                $newContent = $(
-                                    '<div class="content-title">Judul Tabloid Baru</div>');
-                            } else if (type === 'image') {
-                                $newContent = $(
-                                    '<img class="content-image" src="/image.png" alt="Gambar">');
                             }
                             if ($newContent) {
                                 $inner.append($newContent);
@@ -1067,6 +886,124 @@
                         alert('Gagal menyimpan template!');
                     }
                 });
+            });
+
+            $(document).on('click', '#open-modal-gambar', function() {
+                loadDaftarGambar();
+                $('#input-upload-gambar').val('');
+                const modal = new bootstrap.Modal(document.getElementById('modalGambar'));
+                modal.show();
+            });
+
+            function loadDaftarGambar() {
+                $.get('/tabloids/images', function(data) {
+                    const images = data.images;
+                    console.log(images);
+                    const $list = $('#daftar-gambar').empty();
+                    if (images.length === 0) {
+                        $list.append('<div class="col-12 text-center text-muted">Belum ada gambar.</div>');
+                    }
+                    images.forEach(img => {
+                        $list.append(`
+                <div class="col-3 position-relative">
+                    <img src="${img.path}" alt="Gambar tabloid" class="img-thumbnail pilih-gambar" style="cursor:pointer;" data-url="${img.path}">
+                     <button class="btn btn-danger btn-sm btn-delete-gambar position-absolute"
+                        style="top:4px;right:8px;z-index:2;padding:1px 5px;line-height:1;"
+                        data-id="${img.id}" title="Hapus Gambar">x</button>
+                </div>
+            `);
+                    });
+                });
+            }
+
+            // Handle upload gambar
+            $('#form-upload-gambar').on('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                console.log()
+                $.ajax({
+                    url: '/tabloids/upload-image',
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(res) {
+                        alert('Gambar berhasil diupload!');
+                        loadDaftarGambar(); // Refresh daftar gambar
+                    },
+                    error: function(xhr) {
+                        let msg = 'Gagal upload gambar!';
+                        if (xhr.responseJSON && xhr.responseJSON.errors && xhr.responseJSON
+                            .errors.image) {
+                            msg = xhr.responseJSON.errors.image[0];
+                        }
+                        $('#upload-gambar-error').text(msg);
+                    }
+                });
+            });
+
+            // Pilih gambar dari modal
+            $(document).on('click', '.pilih-gambar', function() {
+                const url = $(this).data('url');
+                console.log(url)
+                if (selectedBox && selectedType === 'image') {
+                    selectedBox.attr('src', url);
+                    saveCurrentPage();
+                    // alert('Gambar diperbarui!');
+                }
+                bootstrap.Modal.getInstance(document.getElementById('modalGambar')).hide();
+            });
+
+            $(document).on('click', '.btn-delete-gambar', function(e) {
+                e.stopPropagation(); // Jangan trigger pilih gambar
+                const id = $(this).data('id');
+                if (!confirm('Yakin ingin menghapus gambar ini?')) return;
+                $.ajax({
+                    url: `/tabloids/images/${id}`,
+                    method: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(res) {
+                        loadDaftarGambar();
+                    },
+                    error: function() {
+                        alert('Gagal menghapus gambar!');
+                    }
+                });
+            });
+
+            $(document).on('mousedown', '.pilih-gambar', function(e) {
+                $(this).attr('draggable', true);
+            });
+            $(document).on('dragstart', '.pilih-gambar', function(e) {
+                bootstrap.Modal.getInstance(document.getElementById('modalGambar'))?.hide();
+                e.originalEvent.dataTransfer.setData('image-url', $(this).data('url'));
+            });
+
+            $(document).on('dragover', '.inner-layout-box', function(e) {
+                e.preventDefault();
+            });
+            $(document).on('drop', '.inner-layout-box', function(e) {
+                e.preventDefault();
+                const url = (e.originalEvent && e.originalEvent.dataTransfer) ?
+                    e.originalEvent.dataTransfer.getData('image-url') :
+                    null;
+                if (!url) return;
+
+                if ($(this).find('.content-image, .content-text, .content-title').length) return;
+                $(this).find('.content-placeholder').remove();
+                const $img = $('<img class="content-image" src="' + url +
+                    '" alt="Gambar" style="object-fit=cover;">');
+                $(this).append($img);
+                attachContentClickHandlers($img, 'image');
+                saveCurrentPage();
+            });
+
+            $('#open-modal-import-data').on('click', function() {
+                $('#input-import-data').val('');
+                const modal = new bootstrap.Modal(document.getElementById('modalImportData'));
+                modal.show();
             });
         });
     </script>

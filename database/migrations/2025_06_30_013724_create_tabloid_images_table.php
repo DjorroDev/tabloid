@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('tabloid_images', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('storage_path');
+            $table->string('path');
             $table->softDeletes();
             $table->timestamps();
         });

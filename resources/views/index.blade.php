@@ -9,9 +9,9 @@
 
         /* Paksa font-size kecil untuk semua isi preview tabloid */
         /* .tabloid-preview .content-text * {
-                                                        font-size: 12px !important;
-                                                        line-height: 1.1 !important;
-                                                    } */
+                                                            font-size: 12px !important;
+                                                            line-height: 1.1 !important;
+                                                        } */
     </style>
     <div class="card">
         <h5 class="card-header">List Tabloid</h5>
@@ -67,7 +67,7 @@
                                                                 <img class="content-image"
                                                                     src="{{ asset($layout->content->src ?? '') }}"
                                                                     alt=""
-                                                                    style="width:100%;height:100%;object-fit:fit;display:block;" />
+                                                                    style="width:100%;height:100%;object-fit:{{ $layout->content->objectFit ?? 'contain' }};display:block;" />
                                                             @endif
                                                         </div>
                                                     @endif

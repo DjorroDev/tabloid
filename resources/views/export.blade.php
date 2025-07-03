@@ -2,10 +2,12 @@
 <html>
 
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <title>{{ $tabloid->title }}</title>
     <style>
         body {
-            font-family: sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
@@ -47,7 +49,7 @@
 
         .content-text {
             overflow: hidden;
-            font-size: 0.9em;
+            /* font-size: 0.9em; */
             /* color: #555; */
         }
 
@@ -61,7 +63,7 @@
             width: 100%;
             height: 100%;
             display: block;
-            object-fit: fill;
+            /* object-fit: fill; */
         }
     </style>
 </head>
@@ -87,7 +89,8 @@
                                 @elseif ($layout->content->type === 'image')
                                     {{-- Pastikan ini adalah URL publik yang bisa diakses Dompdf --}}
                                     <img class="content-image" src="{{ asset($layout->content->src) }}"
-                                        alt="{{ $layout->content->alt }}">
+                                        alt="{{ $layout->content->alt }} style"
+                                        style="object-fit: {{ $layout->content->objectFit ?? 'fill' }}">
                                     {{-- <img class="content-image"
                                         src="{{ asset('storage/' . $layout->image->storage_path) }}"
                                         alt="{{ $layout->image->file_name }}"> --}}

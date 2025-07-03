@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TabloidController;
+use App\Http\Controllers\TabloidImageController;
 use App\Http\Controllers\TabloidTemplateController;
 use App\Models\TabloidTemplate;
 use Illuminate\Support\Facades\Route;
@@ -37,3 +38,6 @@ Route::delete('/tabloids/{tabloid}/delete', [TabloidController::class, 'destroy'
 
 Route::get('/tabloids/template', [TabloidTemplateController::class, 'index'])->name('tabloid.template.index');
 Route::post('/tabloids/template/save', [TabloidTemplateController::class, 'save'])->name('tabloid.template.save');
+Route::get('/tabloids/images', [TabloidImageController::class, 'index'])->name('tabloid.image.index');
+Route::post('/tabloids/upload-image', [TabloidImageController::class, 'store'])->name('tabloid.image.store');
+Route::delete('/tabloids/images/{id}', [TabloidImageController::class, 'destroy'])->name('tabloid.image.destroy');

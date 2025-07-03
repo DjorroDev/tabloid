@@ -49,7 +49,7 @@ class TabloidController extends Controller
      */
     public function edit(Tabloid $tabloid)
     {
-        return view('editor', ['tabloid' => $tabloid]);
+        return view('editor.editor', ['tabloid' => $tabloid]);
     }
 
     public function updateTitle(Tabloid $tabloid, Request $request)
@@ -72,7 +72,10 @@ class TabloidController extends Controller
         $tabloid = Tabloid::with(['pages' => function ($q) {
             $q->orderBy('page_number', 'asc');
         }])->find($id);
-        return PDF::format(Format::A4)->view('export', ['tabloid' => $tabloid])->response();
+        return PDF::format(Format::A4)
+            ->view('export', ['tabloid' => $tabloid])
+            ->name($tabloid->title)
+            ->response();
         // return view('export', ['tabloid' => $tabloid]);
     }
 
